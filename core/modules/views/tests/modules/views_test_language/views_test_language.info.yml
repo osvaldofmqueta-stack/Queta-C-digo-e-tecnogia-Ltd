@@ -1,0 +1,13 @@
+name: 'Views Test Language'
+type: module
+description: 'Test module for Views.'
+package: Testing
+# version: VERSION
+dependencies:
+  - drupal:views
+  - drupal:language
+
+# Information added by Drupal.org packaging script on 2025-02-19
+version: '11.1.3'
+project: 'drupal'
+datestamp: 1739986255
