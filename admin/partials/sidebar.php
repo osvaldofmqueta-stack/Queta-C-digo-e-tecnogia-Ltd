@@ -42,6 +42,14 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             <i class="fas fa-comments"></i> Chat de Suporte
         </a>
 
+        <div class="admin-nav-section">Utilizadores & Stats</div>
+        <a href="utilizadores.php" class="<?= $currentFile=='utilizadores.php'?'active':'' ?>">
+            <i class="fas fa-user-friends"></i> Utilizadores Registados
+        </a>
+        <a href="analytics.php" class="<?= $currentFile=='analytics.php'?'active':'' ?>">
+            <i class="fas fa-chart-line"></i> Analytics do Site
+        </a>
+
         <div class="admin-nav-section">Manual</div>
         <a href="categorias.php" class="<?= $currentFile=='categorias.php'?'active':'' ?>">
             <i class="fas fa-folder"></i> Categorias
