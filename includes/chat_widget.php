@@ -118,7 +118,13 @@ function chatEnviar() {
     fd.append('acao', 'enviar');
     fd.append('token', _chatToken);
     fd.append('mensagem', msg);
-    fetch('<?= $_chatRootPath ?>api/chat.php', { method: 'POST', body: fd });
+    fetch('<?= $_chatRootPath ?>api/chat.php', { method: 'POST', body: fd })
+        .then(r => r.json()).then(d => {
+            if (d.ok && d.id) {
+                _chatUltimoId = Math.max(_chatUltimoId, d.id);
+                localStorage.setItem('chat_ultimo_id', _chatUltimoId);
+            }
+        }).catch(() => {});
 }
 
 function chatMostrarDigitando(mostrar) {

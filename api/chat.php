@@ -51,7 +51,8 @@ switch ($acao) {
            ->execute([$token]);
         $db->prepare("INSERT INTO chat_mensagens (sessao_id, de, mensagem) VALUES (?,?,?)")
            ->execute([$sessao['id'], 'visitante', $msg]);
-        echo json_encode(['ok' => true]);
+        $msgId = $db->lastInsertId();
+        echo json_encode(['ok' => true, 'id' => (int)$msgId]);
         break;
 
     case 'receber':

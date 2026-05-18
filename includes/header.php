@@ -80,9 +80,39 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                     <li><a href="<?= $rootPath ?>#planos" class="nav-link">Planos</a></li>
                     <li><a href="<?= $rootPath ?>#sobre" class="nav-link">Sobre Nós</a></li>
                 </ul>
-                <a href="<?= getWhatsappLink() ?>" target="_blank" class="btn-whatsapp-nav">
-                    <i class="fab fa-whatsapp"></i> Fala Connosco
-                </a>
+                <div class="nav-auth-group">
+                    <?php
+                    $_navCarrinhoQtd = 0;
+                    if (clienteLogado()) {
+                        $_navCarrinhoQtd = contarCarrinho($_SESSION['cliente_id']);
+                    }
+                    ?>
+                    <?php if (clienteLogado()): ?>
+                    <a href="<?= $rootPath ?>carrinho.php" class="nav-cart-btn" title="Carrinho">
+                        <i class="fas fa-shopping-cart"></i>
+                        <?php if ($_navCarrinhoQtd > 0): ?>
+                        <span class="nav-cart-badge"><?= $_navCarrinhoQtd ?></span>
+                        <?php endif; ?>
+                    </a>
+                    <div class="nav-user has-dropdown">
+                        <button class="nav-user-btn">
+                            <i class="fas fa-user-circle"></i>
+                            <span><?= h(explode(' ', $_SESSION['cliente_nome'] ?? 'Conta')[0]) ?></span>
+                            <i class="fas fa-chevron-down" style="font-size:10px;"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="<?= $rootPath ?>carrinho.php"><i class="fas fa-shopping-cart"></i> Meu Carrinho</a>
+                            <a href="<?= $rootPath ?>logout.php"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    <a href="<?= $rootPath ?>login.php" class="nav-login-btn"><i class="fas fa-sign-in-alt"></i> Entrar</a>
+                    <a href="<?= $rootPath ?>registro.php" class="nav-register-btn">Criar Conta</a>
+                    <?php endif; ?>
+                    <a href="<?= getWhatsappLink() ?>" target="_blank" class="btn-whatsapp-nav">
+                        <i class="fab fa-whatsapp"></i> Fala Connosco
+                    </a>
+                </div>
             </div>
 
             <button class="nav-toggle" id="nav-toggle" onclick="toggleMenu()">

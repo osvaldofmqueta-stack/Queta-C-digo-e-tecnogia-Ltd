@@ -241,9 +241,15 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
                     <?php endforeach; ?>
                 </ul>
                 <div class="plano-footer">
-                    <a href="<?= getWhatsappLink() ?>" target="_blank" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>;">
-                        <i class="fab fa-whatsapp"></i> Saber Mais
+                    <?php if (clienteLogado()): ?>
+                    <button onclick="adicionarAoCarrinho(<?= $plano['id'] ?>, this)" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>; width:100%; cursor:pointer; font-family:inherit;">
+                        <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                    </button>
+                    <?php else: ?>
+                    <a href="/registro.php?plano=<?= $plano['id'] ?>" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>;">
+                        <i class="fas fa-user-plus"></i> Registar para Contratar
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -253,6 +259,12 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
             Todos os planos incluem suporte de instalação. Precisa de uma proposta personalizada?
             <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco pelo WhatsApp</a>.
         </p>
+        <?php if (!clienteLogado()): ?>
+        <div style="text-align:center; margin-top:16px; padding:14px 20px; background:#f0f7ff; border-radius:10px; font-size:14px;">
+            <i class="fas fa-user-circle" style="color:var(--primary);"></i>
+            Para adicionar ao carrinho, <a href="/registro.php" style="color:var(--primary);font-weight:600;">crie uma conta grátis</a> ou <a href="/login.php" style="color:var(--primary);font-weight:600;">entre na sua conta</a>.
+        </div>
+        <?php endif; ?>
         <div style="text-align:center; margin-top:20px;">
             <a href="planos-comparacao.php" class="btn-secondary">
                 <i class="fas fa-table"></i> Ver Comparação Completa das 79 Funcionalidades
@@ -308,4 +320,49 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
     </div>
 </section>
 
+<script>
+function adicionarAoCarrinho(planoId, btn) {
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A adicionar...';
+    const fd = new FormData();
+    fd.append('acao', 'carrinho_adicionar');
+    fd.append('plano_id', planoId);
+    fetch('/api/auth.php', { method: 'POST', body: fd })
+        .then(r => r.json()).then(d => {
+            if (d.ok) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                btn.style.background = '#1a7a3a';
+                btn.style.borderColor = '#1a7a3a';
+                showCartToast(d.novo ? 'Plano adicionado ao carrinho!' : 'Plano já estava no carrinho.', d.novo ? 'success' : 'info');
+                // Update cart badge
+                const badge = document.querySelector('.nav-cart-badge');
+                if (badge) { badge.textContent = d.total; }
+                else {
+                    const cartBtn = document.querySelector('.nav-cart-btn');
+                    if (cartBtn) {
+                        const b = document.createElement('span');
+                        b.className = 'nav-cart-badge';
+                        b.textContent = d.total;
+                        cartBtn.appendChild(b);
+                    }
+                }
+                setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; btn.style.background = ''; btn.style.borderColor = ''; }, 3000);
+            } else if (d.erro === 'login_required') {
+                window.location.href = '/login.php?plano=' + planoId;
+            } else {
+                btn.innerHTML = orig; btn.disabled = false;
+            }
+        }).catch(() => { btn.innerHTML = orig; btn.disabled = false; });
+}
+
+function showCartToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = 'cart-toast ' + type;
+    t.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'info-circle') + '"></i> ' + msg +
+        ' <a href="/carrinho.php" style="color:rgba(255,255,255,0.8);margin-left:8px;font-size:12px;text-decoration:underline;">Ver carrinho</a>';
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+}
+</script>
 <?php include 'includes/footer.php'; ?>

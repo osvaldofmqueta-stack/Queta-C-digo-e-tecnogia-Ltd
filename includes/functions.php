@@ -197,6 +197,74 @@ function getAplicacao($id) {
     return $stmt->fetch();
 }
 
+/* ===== CLIENTES (UTILIZADORES REGISTADOS) ===== */
+
+function clienteLogado() {
+    return isset($_SESSION['cliente_id']) && $_SESSION['cliente_id'] > 0;
+}
+
+function getClienteLogado() {
+    if (!clienteLogado()) return null;
+    $db = getDB();
+    $s = $db->prepare("SELECT id, nome, email, telefone, escola FROM clientes WHERE id=? AND ativo=1");
+    $s->execute([$_SESSION['cliente_id']]);
+    return $s->fetch();
+}
+
+function registarCliente($nome, $email, $password, $telefone = '', $escola = '') {
+    $db = getDB();
+    $existe = $db->prepare("SELECT id FROM clientes WHERE email=?");
+    $existe->execute([$email]);
+    if ($existe->fetch()) return ['erro' => 'Este email já está registado.'];
+    $hash = password_hash($password, PASSWORD_BCRYPT);
+    $db->prepare("INSERT INTO clientes (nome, email, password_hash, telefone, escola) VALUES (?,?,?,?,?)")
+       ->execute([$nome, $email, $hash, $telefone, $escola]);
+    return ['ok' => true, 'id' => $db->lastInsertId()];
+}
+
+function loginCliente($email, $password) {
+    $db = getDB();
+    $s = $db->prepare("SELECT * FROM clientes WHERE email=? AND ativo=1");
+    $s->execute([$email]);
+    $c = $s->fetch();
+    if (!$c || !password_verify($password, $c['password_hash'])) return false;
+    $_SESSION['cliente_id']   = $c['id'];
+    $_SESSION['cliente_nome'] = $c['nome'];
+    return $c;
+}
+
+function logoutCliente() {
+    unset($_SESSION['cliente_id'], $_SESSION['cliente_nome']);
+}
+
+function getCarrinho($clienteId) {
+    $db = getDB();
+    $s = $db->prepare("SELECT ca.id, p.id as plano_id, p.nome, p.preco, p.periodo, p.cor FROM carrinho ca JOIN planos p ON ca.plano_id=p.id WHERE ca.cliente_id=?");
+    $s->execute([$clienteId]);
+    return $s->fetchAll();
+}
+
+function contarCarrinho($clienteId) {
+    $db = getDB();
+    $s = $db->prepare("SELECT COUNT(*) FROM carrinho WHERE cliente_id=?");
+    $s->execute([$clienteId]);
+    return (int)$s->fetchColumn();
+}
+
+function adicionarCarrinho($clienteId, $planoId) {
+    $db = getDB();
+    $existe = $db->prepare("SELECT id FROM carrinho WHERE cliente_id=? AND plano_id=?");
+    $existe->execute([$clienteId, $planoId]);
+    if ($existe->fetch()) return false;
+    $db->prepare("INSERT INTO carrinho (cliente_id, plano_id) VALUES (?,?)")->execute([$clienteId, $planoId]);
+    return true;
+}
+
+function removerCarrinho($carrinhoId, $clienteId) {
+    $db = getDB();
+    $db->prepare("DELETE FROM carrinho WHERE id=? AND cliente_id=?")->execute([$carrinhoId, $clienteId]);
+}
+
 function h($str) {
     return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
 }
