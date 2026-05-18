@@ -1,0 +1,191 @@
+<?php
+define('DB_PATH', __DIR__ . '/../db/queta.db');
+
+function getDB() {
+    static $db = null;
+    if ($db === null) {
+        $db = new PDO('sqlite:' . DB_PATH);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        $db->exec('PRAGMA foreign_keys = ON;');
+        initDB($db);
+    }
+    return $db;
+}
+
+function initDB($db) {
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS configuracoes (
+            chave TEXT PRIMARY KEY,
+            valor TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS aplicacoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            descricao TEXT,
+            imagem TEXT,
+            url TEXT,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS carousel (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            titulo TEXT NOT NULL,
+            descricao TEXT,
+            imagem TEXT,
+            link TEXT,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS categorias_manual (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            descricao TEXT,
+            icone TEXT DEFAULT 'fa-book',
+            aplicacao_id INTEGER,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS topicos_manual (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            categoria_id INTEGER NOT NULL,
+            titulo TEXT NOT NULL,
+            conteudo TEXT,
+            video_url TEXT,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            visualizacoes INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (categoria_id) REFERENCES categorias_manual(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS topico_passos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            topico_id INTEGER NOT NULL,
+            titulo TEXT,
+            descricao TEXT,
+            imagem TEXT,
+            ordem INTEGER DEFAULT 0,
+            FOREIGN KEY (topico_id) REFERENCES topicos_manual(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS perguntas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            topico_id INTEGER,
+            nome TEXT NOT NULL,
+            email TEXT,
+            pergunta TEXT NOT NULL,
+            resposta TEXT,
+            respondido INTEGER DEFAULT 0,
+            publicado INTEGER DEFAULT 1,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+            respondido_em DATETIME,
+            FOREIGN KEY (topico_id) REFERENCES topicos_manual(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS funcionalidades (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            aplicacao_id INTEGER,
+            titulo TEXT NOT NULL,
+            descricao TEXT,
+            imagem TEXT,
+            destaque INTEGER DEFAULT 0,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS admin_usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            nome TEXT,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS target_audience (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            aplicacao_id INTEGER,
+            titulo TEXT NOT NULL,
+            descricao TEXT,
+            icone TEXT DEFAULT 'fa-user',
+            ordem INTEGER DEFAULT 0,
+            FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
+        );
+    ");
+
+    $check = $db->query("SELECT COUNT(*) as c FROM admin_usuarios")->fetch();
+    if ($check['c'] == 0) {
+        $hash = password_hash('admin123', PASSWORD_DEFAULT);
+        $db->exec("INSERT INTO admin_usuarios (username, password, nome) VALUES ('admin', '$hash', 'Administrador')");
+    }
+
+    $checkApp = $db->query("SELECT COUNT(*) as c FROM aplicacoes")->fetch();
+    if ($checkApp['c'] == 0) {
+        $db->exec("INSERT INTO aplicacoes (nome, descricao, imagem, url, ativo, ordem)
+            VALUES ('Super Escola', 'Sistema ERP de Gestão Académica. Simplifique a gestão da sua escola e gere mais receita!', 'super-escola.png', '#demo', 1, 1)");
+
+        $appId = $db->lastInsertId();
+
+        $db->exec("INSERT INTO carousel (titulo, descricao, imagem, link, ativo, ordem) VALUES
+            ('Bem-vindo à Queta Código e Tecnologia', 'Soluções tecnológicas para a educação moderna', 'carousel1.jpg', '#sobre', 1, 1),
+            ('Super Escola — ERP Académico', 'Gerencie matrículas, notas, finanças e muito mais numa só plataforma', 'carousel2.jpg', '#demo', 1, 2),
+            ('Simplifique a Gestão da sua Escola', 'Aumente a eficiência administrativa e gere mais receita com o Super Escola', 'carousel3.jpg', '#contacto', 1, 3)");
+
+        $db->exec("INSERT INTO categorias_manual (nome, descricao, icone, aplicacao_id, ativo, ordem) VALUES
+            ('Primeiros Passos', 'Configurações iniciais e introdução ao sistema', 'fa-rocket', $appId, 1, 1),
+            ('Gestão de Alunos', 'Matrículas, transferências e historial académico', 'fa-user-graduate', $appId, 1, 2),
+            ('Gestão Financeira', 'Propinas, pagamentos e relatórios financeiros', 'fa-money-bill-wave', $appId, 1, 3),
+            ('Relatórios e Estatísticas', 'Dashboards e relatórios de desempenho', 'fa-chart-bar', $appId, 1, 4),
+            ('Configurações do Sistema', 'Parâmetros gerais, utilizadores e permissões', 'fa-cog', $appId, 1, 5)");
+
+        $cat1 = $db->query("SELECT id FROM categorias_manual WHERE nome='Primeiros Passos'")->fetch();
+        $catId = $cat1['id'];
+
+        $db->exec("INSERT INTO topicos_manual (categoria_id, titulo, conteudo, ativo, ordem) VALUES
+            ($catId, 'Como fazer o primeiro login', 'Aprenda a aceder ao sistema pela primeira vez e configurar a sua conta.', 1, 1),
+            ($catId, 'Configurar os dados da escola', 'Preencha todas as informações básicas da sua instituição de ensino.', 1, 2),
+            ($catId, 'Criar o ano lectivo', 'Defina o ano lectivo, trimestres e calendário escolar.', 1, 3)");
+
+        $topicoId = $db->query("SELECT id FROM topicos_manual WHERE titulo='Como fazer o primeiro login'")->fetch()['id'];
+
+        $db->exec("INSERT INTO topico_passos (topico_id, titulo, descricao, ordem) VALUES
+            ($topicoId, 'Aceder ao endereço do sistema', 'Abra o seu navegador e aceda ao endereço fornecido pela equipa de suporte. Ex: https://suaescola.superescola.ao', 1),
+            ($topicoId, 'Introduzir as credenciais', 'Na página de login, insira o seu nome de utilizador e a senha temporária enviada por email.', 2),
+            ($topicoId, 'Alterar a senha no primeiro acesso', 'O sistema vai pedir que altere a senha temporária. Escolha uma senha segura com pelo menos 8 caracteres.', 3),
+            ($topicoId, 'Explorar o painel principal', 'Após o login, será redirecionado para o painel principal onde pode ver um resumo de toda a atividade escolar.', 4)");
+
+        $db->exec("INSERT INTO funcionalidades (aplicacao_id, titulo, descricao, destaque, ativo, ordem) VALUES
+            ($appId, 'Gestão de Matrículas', 'Processo digital completo de matrículas com geração automática de fichas e contratos.', 1, 1, 1),
+            ($appId, 'Controlo de Propinas', 'Acompanhe pagamentos, gere recibos e envie notificações automáticas de atraso.', 1, 1, 2),
+            ($appId, 'Livro de Notas Digital', 'Lançamento de notas online com cálculo automático de médias e aprovação/reprovação.', 1, 1, 3),
+            ($appId, 'Comunicação Interna', 'Sistema de mensagens entre professores, alunos e encarregados de educação.', 1, 1, 4),
+            ($appId, 'Relatórios Automáticos', 'Gere relatórios detalhados de desempenho escolar, financeiro e administrativo.', 0, 1, 5),
+            ($appId, 'App para Pais', 'Os encarregados acompanham as notas, presenças e mensagens pelo telemóvel.', 0, 1, 6)");
+
+        $db->exec("INSERT INTO target_audience (aplicacao_id, titulo, descricao, icone, ordem) VALUES
+            ($appId, 'Escolas Primárias', 'Ideal para gerir turmas, notas e comunicação com os encarregados de educação.', 'fa-school', 1),
+            ($appId, 'Escolas Secundárias', 'Controlo completo de matrículas, avaliações e propinas para o ensino secundário.', 'fa-graduation-cap', 2),
+            ($appId, 'Institutos e Faculdades', 'Solução escalável para instituições de ensino superior com múltiplos cursos.', 'fa-university', 3),
+            ($appId, 'Centros de Formação', 'Gestão de turmas, certificados e pagamentos para centros de formação profissional.', 'fa-chalkboard-teacher', 4)");
+
+        $db->exec("INSERT INTO configuracoes (chave, valor) VALUES
+            ('site_nome', 'Queta Código e Tecnologia, Ltd'),
+            ('site_slogan', 'Tecnologia ao serviço da educação'),
+            ('site_email', 'geral@queta.ao'),
+            ('whatsapp_numero', '244923000000'),
+            ('whatsapp_mensagem', 'Olá! Gostaria de saber mais sobre o Super Escola.'),
+            ('youtube_video', 'https://www.youtube.com/embed/dQw4w9WgXcQ'),
+            ('demo_link', '#contacto'),
+            ('logo', '')");
+    }
+}
