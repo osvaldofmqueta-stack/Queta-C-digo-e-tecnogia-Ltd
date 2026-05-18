@@ -195,52 +195,63 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <?php endif; ?>
 
 <!-- PLANOS / PREÇOS -->
-<?php if (!empty($planos)): ?>
+<?php if (!empty($planos)):
+    $planoIcons = ['Premium' => '⭐', 'Golden' => '🥇', 'Ruby' => '💎'];
+?>
 <section class="planos-section" id="planos">
     <div class="container">
         <div class="section-header">
             <span class="section-badge"><i class="fas fa-tags"></i> Planos & Preços</span>
             <h2 class="section-title">Escolha o Plano Certo para a sua Escola</h2>
-            <p class="section-subtitle">Planos flexíveis adaptados ao tamanho e necessidades da sua instituição. Sem surpresas, sem custos ocultos.</p>
+            <p class="section-subtitle">Planos flexíveis com funcionalidades pensadas para todos os tipos de instituições de ensino.</p>
         </div>
         <div class="planos-grid">
             <?php foreach ($planos as $plano):
                 $itens = getPlanoItens($plano['id']);
+                $icon = $planoIcons[$plano['nome']] ?? '🎓';
+                $numItens = count($itens);
             ?>
             <div class="plano-card <?= $plano['destaque'] ? 'plano-destaque' : '' ?>">
-                <?php if ($plano['badge']): ?>
-                <div class="plano-badge"><?= h($plano['badge']) ?></div>
-                <?php endif; ?>
-                <div class="plano-header" style="border-top: 4px solid <?= h($plano['cor']) ?>;">
-                    <h3 class="plano-nome"><?= h($plano['nome']) ?></h3>
+                <div class="plano-header" style="background: <?= h($plano['cor']) ?>; border-top: none;">
+                    <div class="plano-icon-row">
+                        <span class="plano-emoji"><?= $icon ?></span>
+                        <?php if ($plano['badge']): ?>
+                        <span class="plano-count-badge"><?= h($plano['badge']) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <h3 class="plano-nome" style="color:white;"><?= h($plano['nome']) ?></h3>
                     <?php if ($plano['descricao']): ?>
-                    <p class="plano-desc"><?= h($plano['descricao']) ?></p>
+                    <p class="plano-desc" style="color:rgba(255,255,255,.85);"><?= h($plano['descricao']) ?></p>
                     <?php endif; ?>
                     <div class="plano-preco">
-                        <span class="plano-valor"><?= h($plano['preco']) ?></span>
-                        <span class="plano-periodo">/ <?= h($plano['periodo']) ?></span>
+                        <?php if ($plano['preco'] === 'Consultar'): ?>
+                        <span class="plano-valor" style="color:white; font-size:22px;">Consultar preço</span>
+                        <?php else: ?>
+                        <span class="plano-valor" style="color:white;"><?= h($plano['preco']) ?></span>
+                        <span class="plano-periodo" style="color:rgba(255,255,255,.8);">/ <?= h($plano['periodo']) ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <ul class="plano-itens">
+                <ul class="plano-itens plano-itens-scroll">
                     <?php foreach ($itens as $item): ?>
                     <li class="<?= $item['incluido'] ? 'incluido' : 'nao-incluido' ?>">
-                        <i class="fas <?= $item['incluido'] ? 'fa-check-circle' : 'fa-times-circle' ?>"></i>
+                        <i class="fas <?= $item['incluido'] ? 'fa-check-circle' : 'fa-times-circle' ?>" style="color:<?= $item['incluido'] ? h($plano['cor']) : '#ccc' ?>;"></i>
                         <?= h($item['descricao']) ?>
                     </li>
                     <?php endforeach; ?>
                 </ul>
                 <div class="plano-footer">
-                    <a href="<?= getWhatsappLink() ?>" target="_blank" class="plano-btn" style="background: <?= $plano['destaque'] ? h($plano['cor']) : 'transparent' ?>; color: <?= $plano['destaque'] ? 'white' : h($plano['cor']) ?>; border-color: <?= h($plano['cor']) ?>;">
-                        <i class="fab fa-whatsapp"></i> Contratar Plano
+                    <a href="<?= getWhatsappLink() ?>" target="_blank" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>;">
+                        <i class="fab fa-whatsapp"></i> Saber Mais
                     </a>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
-        <p style="text-align:center; margin-top:28px; color:var(--text-light); font-size:14px;">
+        <p style="text-align:center; margin-top:32px; color:var(--text-light); font-size:14px;">
             <i class="fas fa-info-circle" style="color:var(--primary);"></i>
-            Todos os planos incluem 30 dias de teste grátis. Precisa de uma solução personalizada?
-            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco</a>.
+            Todos os planos incluem suporte de instalação. Precisa de uma proposta personalizada?
+            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco pelo WhatsApp</a>.
         </p>
     </div>
 </section>

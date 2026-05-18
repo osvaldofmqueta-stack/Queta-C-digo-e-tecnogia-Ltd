@@ -206,41 +206,102 @@ function initDB($db) {
         $checkPlanos = $db->query("SELECT COUNT(*) as c FROM planos")->fetch();
         if ($checkPlanos['c'] == 0) {
             $db->exec("INSERT INTO planos (aplicacao_id, nome, preco, periodo, descricao, destaque, ativo, ordem, cor, badge) VALUES
-                ($appId, 'Básico', '25.000 Kz', 'mês', 'Ideal para escolas pequenas que estão a começar a digitalizar a gestão.', 0, 1, 1, '#57606A', ''),
-                ($appId, 'Profissional', '55.000 Kz', 'mês', 'A escolha mais popular para escolas em crescimento com múltiplas turmas.', 1, 1, 2, '#0066FF', 'Mais Popular'),
-                ($appId, 'Enterprise', '95.000 Kz', 'mês', 'Solução completa para grandes instituições com múltiplos campi.', 0, 1, 3, '#00C896', '')");
+                ($appId, 'Premium', 'Consultar', 'mês', 'A base completa para gerir a sua escola: alunos, professores, turmas, notas, presenças e muito mais.', 0, 1, 1, '#0066FF', '32 Funcionalidades'),
+                ($appId, 'Golden', 'Consultar', 'mês', 'Tudo do Premium mais gestão financeira, biblioteca, recursos humanos, relatórios avançados e emissão de documentos.', 1, 1, 2, '#F5A623', '70 Funcionalidades'),
+                ($appId, 'Ruby', 'Consultar', 'mês', 'A solução completa e sem limites: payroll, auditoria, super administração, integração MED/SIGE Gov e muito mais.', 0, 1, 3, '#C0392B', '79 Funcionalidades')");
 
             $p1 = $db->lastInsertId() - 2;
             $p2 = $p1 + 1;
             $p3 = $p1 + 2;
 
+            // Premium — 32 funcionalidades (destaques para o card)
             $db->exec("INSERT INTO plano_itens (plano_id, descricao, incluido, ordem) VALUES
-                ($p1, 'Até 200 alunos', 1, 1),
-                ($p1, 'Gestão de matrículas', 1, 2),
-                ($p1, 'Livro de notas digital', 1, 3),
-                ($p1, 'Controlo de propinas', 1, 4),
-                ($p1, 'Relatórios básicos', 1, 5),
-                ($p1, 'App para pais', 0, 6),
-                ($p1, 'Múltiplos campi', 0, 7),
-                ($p1, 'Suporte prioritário', 0, 8),
+                ($p1, 'Dashboard Principal', 1, 1),
+                ($p1, 'Gestão de Alunos', 1, 2),
+                ($p1, 'Gestão de Professores', 1, 3),
+                ($p1, 'Turmas e Salas de Aula', 1, 4),
+                ($p1, 'Notas, Pautas e Presenças', 1, 5),
+                ($p1, 'Horário Escolar', 1, 6),
+                ($p1, 'Portal do Estudante', 1, 7),
+                ($p1, 'Portal do Encarregado', 1, 8),
+                ($p1, 'Painel da Secretaria', 1, 9),
+                ($p1, 'Admissões e Matrículas', 1, 10),
+                ($p1, 'Editor e Hub de Documentos', 1, 11),
+                ($p1, 'Geração de PDFs', 1, 12),
+                ($p1, 'Boletim de Matrícula e Propina', 1, 13),
+                ($p1, 'Notificações do Sistema', 1, 14),
+                ($p1, 'Painel do Professor', 1, 15),
+                ($p1, 'Materiais Didáticos', 1, 16),
+                ($p1, 'Calendário Escolar / Eventos', 1, 17),
+                ($p1, 'Solicitações de Documentos', 1, 18),
+                ($p1, 'Arquivo de Documentos', 1, 19),
+                ($p1, 'Abertura de Avaliações', 1, 20),
+                ($p1, 'Organizar Turmas', 1, 21),
+                ($p1, 'Acta de Presença em Provas', 1, 22),
+                ($p1, 'Mensagens (Professor)', 1, 23),
+                ($p1, 'Sumário / Presenças (Professor)', 1, 24),
+                ($p1, 'Pautas & Notas (Professor)', 1, 25),
+                ($p1, 'Minhas Turmas (Professor)', 1, 26),
+                ($p1, 'Processos da Secretaria', 1, 27),
+                ($p1, 'Gestão Académica (Hub)', 1, 28),
+                ($p1, 'Boletim de Matrícula', 1, 29),
+                ($p1, 'Boletim de Propina', 1, 30),
+                ($p1, 'Acompanhamento de Pautas', 1, 31),
+                ($p1, 'Consulta de Aluno', 1, 32)");
 
-                ($p2, 'Até 1.000 alunos', 1, 1),
-                ($p2, 'Gestão de matrículas', 1, 2),
-                ($p2, 'Livro de notas digital', 1, 3),
-                ($p2, 'Controlo de propinas', 1, 4),
-                ($p2, 'Relatórios avançados', 1, 5),
-                ($p2, 'App para pais', 1, 6),
-                ($p2, 'Múltiplos campi', 0, 7),
-                ($p2, 'Suporte prioritário', 1, 8),
+            // Golden — 70 funcionalidades (Premium + 38 extras)
+            $db->exec("INSERT INTO plano_itens (plano_id, descricao, incluido, ordem) VALUES
+                ($p2, 'Tudo do Plano Premium (32 funcionalidades)', 1, 1),
+                ($p2, 'Dashboard CEO', 1, 2),
+                ($p2, 'Gestão Financeira Completa', 1, 3),
+                ($p2, 'Hub de Pagamentos', 1, 4),
+                ($p2, 'Extrato de Propinas', 1, 5),
+                ($p2, 'Relatórios Financeiros', 1, 6),
+                ($p2, 'Validação Financeira de Documentos', 1, 7),
+                ($p2, 'Biblioteca Escolar', 1, 8),
+                ($p2, 'Gestão da Biblioteca', 1, 9),
+                ($p2, 'Transferências de Alunos', 1, 10),
+                ($p2, 'Histórico Académico', 1, 11),
+                ($p2, 'Grelha Curricular', 1, 12),
+                ($p2, 'Disciplinas', 1, 13),
+                ($p2, 'Quadro de Honra', 1, 14),
+                ($p2, 'Exclusões de Faltas', 1, 15),
+                ($p2, 'Diário de Classe', 1, 16),
+                ($p2, 'Director de Turma', 1, 17),
+                ($p2, 'Relatório de Faltas', 1, 18),
+                ($p2, 'Chat Interno', 1, 19),
+                ($p2, 'Calendário Académico', 1, 20),
+                ($p2, 'Bolsas e Subsídios', 1, 21),
+                ($p2, 'Análise de Desempenho', 1, 22),
+                ($p2, 'Visão Geral Multi-Ano', 1, 23),
+                ($p2, 'Relatórios & Análise Avançados', 1, 24),
+                ($p2, 'Hub de Recursos Humanos', 1, 25),
+                ($p2, 'Área Pedagógica', 1, 26),
+                ($p2, 'Plano de Aula', 1, 27),
+                ($p2, 'Avaliação de Professores', 1, 28),
+                ($p2, 'Trabalhos Finais / PAP', 1, 29),
+                ($p2, 'Registo de Funcionários', 1, 30),
+                ($p2, 'Alterar Tipo de Vínculo', 1, 31),
+                ($p2, 'Finalistas', 1, 32),
+                ($p2, 'Controlo de Faltas e Tempos (RH)', 1, 33),
+                ($p2, 'Histórico de RUPE', 1, 34),
+                ($p2, 'Tesouraria', 1, 35),
+                ($p2, 'Acompanhamento de Pautas', 1, 36),
+                ($p2, 'Estúdio de Emissão', 1, 37),
+                ($p2, 'Centro de Emissão', 1, 38),
+                ($p2, 'Consulta de Aluno', 1, 39)");
 
-                ($p3, 'Alunos ilimitados', 1, 1),
-                ($p3, 'Gestão de matrículas', 1, 2),
-                ($p3, 'Livro de notas digital', 1, 3),
-                ($p3, 'Controlo de propinas', 1, 4),
-                ($p3, 'Relatórios avançados', 1, 5),
-                ($p3, 'App para pais', 1, 6),
-                ($p3, 'Múltiplos campi', 1, 7),
-                ($p3, 'Suporte prioritário', 1, 8)");
+            // Ruby — 79 funcionalidades (Golden + 9 extras)
+            $db->exec("INSERT INTO plano_itens (plano_id, descricao, incluido, ordem) VALUES
+                ($p3, 'Tudo do Plano Golden (70 funcionalidades)', 1, 1),
+                ($p3, 'Controlo de RH', 1, 2),
+                ($p3, 'Processamento de Salários (Payroll)', 1, 3),
+                ($p3, 'Auditoria do Sistema', 1, 4),
+                ($p3, 'Controlo & Supervisão', 1, 5),
+                ($p3, 'Gestão de Acessos', 1, 6),
+                ($p3, 'Super Administração', 1, 7),
+                ($p3, 'Integração MED / SIGE Gov', 1, 8),
+                ($p3, 'Gestão de Planos de Subscrição', 1, 9)");
         }
 
         $db->exec("INSERT INTO configuracoes (chave, valor) VALUES
