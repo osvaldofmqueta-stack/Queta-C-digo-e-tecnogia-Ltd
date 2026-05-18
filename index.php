@@ -253,6 +253,11 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
             Todos os planos incluem suporte de instalação. Precisa de uma proposta personalizada?
             <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco pelo WhatsApp</a>.
         </p>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="planos-comparacao.php" class="btn-secondary">
+                <i class="fas fa-table"></i> Ver Comparação Completa das 79 Funcionalidades
+            </a>
+        </div>
     </div>
 </section>
 <?php endif; ?>

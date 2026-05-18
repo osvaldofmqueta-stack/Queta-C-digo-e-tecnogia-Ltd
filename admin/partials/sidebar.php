@@ -19,6 +19,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         <a href="planos.php" class="<?= $currentFile=='planos.php'?'active':'' ?>">
             <i class="fas fa-tags"></i> Planos & Preços
         </a>
+        <a href="clientes.php" class="<?= $currentFile=='clientes.php'?'active':'' ?>">
+            <i class="fas fa-school"></i> Clientes em Destaque
+        </a>
         <a href="aplicacoes.php" class="<?= $currentFile=='aplicacoes.php'?'active':'' ?>">
             <i class="fas fa-graduation-cap"></i> Aplicações
         </a>

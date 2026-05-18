@@ -122,6 +122,19 @@ function initDB($db) {
             FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
         );
 
+        CREATE TABLE IF NOT EXISTS clientes_destaque (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome_escola TEXT NOT NULL,
+            logo TEXT DEFAULT '',
+            plano TEXT NOT NULL,
+            plano_cor TEXT DEFAULT '#0066FF',
+            plano_emoji TEXT DEFAULT '⭐',
+            localizacao TEXT DEFAULT '',
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+
         CREATE TABLE IF NOT EXISTS planos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             aplicacao_id INTEGER,
@@ -202,6 +215,16 @@ function initDB($db) {
             ($appId, 'Escolas Secundárias', 'Controlo completo de matrículas, avaliações e propinas para o ensino secundário.', 'fa-graduation-cap', 2),
             ($appId, 'Institutos e Faculdades', 'Solução escalável para instituições de ensino superior com múltiplos cursos.', 'fa-university', 3),
             ($appId, 'Centros de Formação', 'Gestão de turmas, certificados e pagamentos para centros de formação profissional.', 'fa-chalkboard-teacher', 4)");
+
+        $checkClientes = $db->query("SELECT COUNT(*) as c FROM clientes_destaque")->fetch();
+        if ($checkClientes['c'] == 0) {
+            $db->exec("INSERT INTO clientes_destaque (nome_escola, logo, plano, plano_cor, plano_emoji, localizacao, ativo, ordem) VALUES
+                ('Colégio Sagrado Coração', '', 'Golden', '#F5A623', '🥇', 'Luanda, Angola', 1, 1),
+                ('Instituto Superior Politécnico do Huambo', '', 'Ruby', '#C0392B', '💎', 'Huambo, Angola', 1, 2),
+                ('Escola Primária Nações Unidas', '', 'Premium', '#0066FF', '⭐', 'Benguela, Angola', 1, 3),
+                ('Colégio Internacional de Cabinda', '', 'Golden', '#F5A623', '🥇', 'Cabinda, Angola', 1, 4),
+                ('Instituto Médio Comercial', '', 'Premium', '#0066FF', '⭐', 'Luanda, Angola', 1, 5)");
+        }
 
         $checkPlanos = $db->query("SELECT COUNT(*) as c FROM planos")->fetch();
         if ($checkPlanos['c'] == 0) {

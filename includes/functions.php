@@ -182,6 +182,14 @@ function getWhatsappLink() {
     return "https://wa.me/$numero?text=$msg";
 }
 
+function getClientesDestaque($apenasAtivos = true) {
+    $db = getDB();
+    $sql = "SELECT * FROM clientes_destaque";
+    if ($apenasAtivos) $sql .= " WHERE ativo=1";
+    $sql .= " ORDER BY ordem, id";
+    return $db->query($sql)->fetchAll();
+}
+
 function getAplicacao($id) {
     $db = getDB();
     $stmt = $db->prepare("SELECT * FROM aplicacoes WHERE id=?");

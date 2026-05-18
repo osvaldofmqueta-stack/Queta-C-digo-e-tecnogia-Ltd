@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initMobileMenu();
     initSearchFilter();
     initSmoothScroll();
+    initClientNotif();
 });
 
 // COOKIE BANNER
@@ -198,6 +199,70 @@ function previewImage(input, previewId) {
         reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+// =========================================
+// CLIENT SOCIAL PROOF NOTIFICATION
+// =========================================
+let _notifIndex = 0;
+let _notifTimer = null;
+let _notifClosed = false;
+
+function initClientNotif() {
+    if (typeof _clientesNotif === 'undefined' || !_clientesNotif.length) return;
+    if (sessionStorage.getItem('notif_closed')) return;
+    setTimeout(showNextNotif, 4000);
+}
+
+function showNextNotif() {
+    if (_notifClosed || typeof _clientesNotif === 'undefined') return;
+    const widget = document.getElementById('client-notif');
+    if (!widget) return;
+
+    const c = _clientesNotif[_notifIndex % _clientesNotif.length];
+    _notifIndex++;
+
+    const imgEl      = document.getElementById('notif-logo-img');
+    const initialsEl = document.getElementById('notif-logo-initials');
+    const escolaEl   = document.getElementById('notif-escola');
+    const planEl     = document.getElementById('notif-plan');
+    const locEl      = document.getElementById('notif-loc');
+
+    // Logo or initials
+    if (c.logo) {
+        imgEl.src = '/' + c.logo;
+        imgEl.style.display = 'block';
+        initialsEl.style.display = 'none';
+    } else {
+        imgEl.style.display = 'none';
+        initialsEl.textContent = c.nome_escola.substring(0, 2).toUpperCase();
+        initialsEl.style.background = c.plano_cor;
+        initialsEl.style.display = 'flex';
+    }
+
+    escolaEl.textContent = c.nome_escola;
+    planEl.innerHTML = `<span style="background:${c.plano_cor};color:white;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">${c.plano_emoji} ${c.plano}</span>`;
+    locEl.innerHTML = c.localizacao ? `<i class="fas fa-map-marker-alt"></i> ${c.localizacao}` : '';
+
+    // Slide in
+    widget.classList.remove('notif-hiding');
+    widget.classList.add('notif-visible');
+
+    _notifTimer = setTimeout(() => {
+        widget.classList.add('notif-hiding');
+        setTimeout(() => {
+            widget.classList.remove('notif-visible', 'notif-hiding');
+            setTimeout(showNextNotif, 2000);
+        }, 500);
+    }, 5500);
+}
+
+function closeClientNotif() {
+    _notifClosed = true;
+    sessionStorage.setItem('notif_closed', '1');
+    clearTimeout(_notifTimer);
+    const widget = document.getElementById('client-notif');
+    if (widget) { widget.classList.add('notif-hiding'); setTimeout(() => widget.classList.remove('notif-visible','notif-hiding'), 500); }
 }
 
 // SHOW ALERT

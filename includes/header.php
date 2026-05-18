@@ -86,3 +86,27 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
 <a href="<?= getWhatsappLink() ?>" target="_blank" class="whatsapp-float" title="Fala connosco via WhatsApp">
     <i class="fab fa-whatsapp"></i>
 </a>
+
+<!-- Social Proof Notification Widget -->
+<?php $clientesNotif = getClientesDestaque(); ?>
+<?php if (!empty($clientesNotif)): ?>
+<div id="client-notif" class="client-notif" aria-live="polite">
+    <button class="notif-close-btn" onclick="closeClientNotif()" title="Fechar">×</button>
+    <div class="notif-pulse-dot"></div>
+    <div class="notif-inner">
+        <div class="notif-logo-wrap">
+            <img id="notif-logo-img" src="" alt="" class="notif-logo-img">
+            <div id="notif-logo-initials" class="notif-logo-initials"></div>
+        </div>
+        <div class="notif-info">
+            <div class="notif-action-text"><i class="fas fa-check-circle"></i> Aderiu recentemente</div>
+            <div id="notif-escola" class="notif-escola-name"></div>
+            <div id="notif-plan" class="notif-plan-pill"></div>
+            <div id="notif-loc" class="notif-location"></div>
+        </div>
+    </div>
+</div>
+<script>
+const _clientesNotif = <?= json_encode(array_values($clientesNotif)) ?>;
+</script>
+<?php endif; ?>
