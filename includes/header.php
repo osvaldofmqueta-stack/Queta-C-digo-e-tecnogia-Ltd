@@ -66,6 +66,18 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                         </div>
                     </li>
                     <li><a href="<?= $rootPath ?>perguntas/" class="nav-link <?= strpos($_SERVER['REQUEST_URI'],'/perguntas/')!==false?'active':'' ?>">Perguntas & Respostas</a></li>
+                    <li class="has-dropdown">
+                        <a href="<?= $rootPath ?>aceder.php" class="nav-link <?= $currentPage=='aceder.php'?'active':'' ?>">
+                            Aceder <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <?php foreach(getAplicacoes() as $a): ?>
+                            <a href="<?= $rootPath ?>aceder.php?app=<?= $a['id'] ?>">
+                                <i class="fas fa-graduation-cap"></i> <?= h($a['nome']) ?>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </li>
                     <li><a href="<?= $rootPath ?>#planos" class="nav-link">Planos</a></li>
                     <li><a href="<?= $rootPath ?>#sobre" class="nav-link">Sobre Nós</a></li>
                     <li><a href="<?= $rootPath ?>#contacto" class="nav-link">Contacto</a></li>
