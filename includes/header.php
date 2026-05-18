@@ -66,6 +66,7 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                         </div>
                     </li>
                     <li><a href="<?= $rootPath ?>perguntas/" class="nav-link <?= strpos($_SERVER['REQUEST_URI'],'/perguntas/')!==false?'active':'' ?>">Perguntas & Respostas</a></li>
+                    <li><a href="<?= $rootPath ?>#planos" class="nav-link">Planos</a></li>
                     <li><a href="<?= $rootPath ?>#sobre" class="nav-link">Sobre Nós</a></li>
                     <li><a href="<?= $rootPath ?>#contacto" class="nav-link">Contacto</a></li>
                 </ul>
