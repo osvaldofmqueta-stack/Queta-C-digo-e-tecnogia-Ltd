@@ -58,6 +58,16 @@ $categorias = getCategoriasManual();
             </div>
         </div>
     </div>
+    <div class="footer-visitors">
+        <div class="container">
+            <div class="footer-visitors-inner">
+                <i class="fas fa-chart-line"></i>
+                <span>Total de visitas ao site:</span>
+                <strong id="visitor-count">—</strong>
+                <span class="visitors-live"><span class="live-dot"></span> Em tempo real</span>
+            </div>
+        </div>
+    </div>
     <div class="footer-bottom">
         <div class="container">
             <p>&copy; <?= date('Y') ?> <?= h($siteName) ?>. Todos os direitos reservados.</p>
@@ -94,5 +104,6 @@ new QRCode(document.getElementById("dev-qrcode"), {
 });
 </script>
 <?= isset($extraScripts) ? $extraScripts : '' ?>
+<?php include __DIR__ . '/chat_widget.php'; ?>
 </body>
 </html>

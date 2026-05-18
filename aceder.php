@@ -102,16 +102,42 @@ $perfis = !empty($perfisDB) ? array_map(fn($p) => [
             <?php endforeach; ?>
         </div>
 
-        <div class="aceder-nota">
-            <i class="fas fa-info-circle"></i>
-            <div>
-                <strong>Não tem as suas credenciais?</strong>
-                As credenciais de acesso são fornecidas pela sua instituição de ensino ou pela nossa equipa de suporte.
-                <a href="<?= $whatsapp ?>" target="_blank">Contactar suporte <i class="fas fa-external-link-alt"></i></a>
+        <div class="aceder-demo-box">
+            <div class="aceder-demo-header">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                    <strong>Não tem acesso? Solicite uma Demonstração</strong>
+                    <span>Preencha o formulário e entraremos em contacto por WhatsApp.</span>
+                </div>
             </div>
+            <form class="aceder-demo-form" id="form-demo" onsubmit="submeterDemo(event)">
+                <div class="aceder-demo-fields">
+                    <input type="text" id="demo-nome" placeholder="O seu nome *" required maxlength="80">
+                    <input type="tel" id="demo-tel" placeholder="Telefone / WhatsApp *" required maxlength="30">
+                    <input type="text" id="demo-escola" placeholder="Nome da escola (opcional)" maxlength="100">
+                </div>
+                <button type="submit" class="btn-demo-submit">
+                    <i class="fab fa-whatsapp"></i> Solicitar via WhatsApp
+                </button>
+            </form>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
+<script>
+function submeterDemo(e) {
+    e.preventDefault();
+    const nome   = document.getElementById('demo-nome').value.trim();
+    const tel    = document.getElementById('demo-tel').value.trim();
+    const escola = document.getElementById('demo-escola').value.trim();
+    const texto  = 'Olá! Gostaria de solicitar uma demonstração do Super Escola.' +
+                   '\n\nNome: ' + nome +
+                   '\nTelefone: ' + tel +
+                   (escola ? '\nEscola: ' + escola : '') +
+                   '\n\nAguardo o vosso contacto. Obrigado!';
+    const url = 'https://api.whatsapp.com/send?phone=244926219731&text=' + encodeURIComponent(texto) + '&type=phone_number&app_absent=0';
+    window.open(url, '_blank');
+}
+</script>
 <?php include 'includes/footer.php'; ?>

@@ -52,7 +52,6 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
 
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-links">
-                    <li><a href="<?= $rootPath ?>" class="nav-link <?= $currentPage=='index.php'?'active':'' ?>">Início</a></li>
                     <li class="has-dropdown">
                         <a href="<?= $rootPath ?>manual/" class="nav-link <?= strpos($_SERVER['REQUEST_URI'],'/manual/')!==false?'active':'' ?>">
                             Manual de Apoio <i class="fas fa-chevron-down"></i>
@@ -80,7 +79,6 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                     </li>
                     <li><a href="<?= $rootPath ?>#planos" class="nav-link">Planos</a></li>
                     <li><a href="<?= $rootPath ?>#sobre" class="nav-link">Sobre Nós</a></li>
-                    <li><a href="<?= $rootPath ?>#contacto" class="nav-link">Contacto</a></li>
                 </ul>
                 <a href="<?= getWhatsappLink() ?>" target="_blank" class="btn-whatsapp-nav">
                     <i class="fab fa-whatsapp"></i> Fala Connosco
@@ -94,10 +92,6 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
     </nav>
 </header>
 
-<!-- WhatsApp Float Button -->
-<a href="<?= getWhatsappLink() ?>" target="_blank" class="whatsapp-float" title="Fala connosco via WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
 
 <!-- Social Proof Notification Widget -->
 <?php $clientesNotif = getClientesDestaque(); ?>
