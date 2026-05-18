@@ -519,6 +519,18 @@ section { padding: 80px 0; }
 .footer-bottom-links a { color: rgba(255,255,255,0.4); font-size: 13px; }
 .footer-bottom-links a:hover { color: white; }
 
+/* FOOTER DEV / QR CODE */
+.footer-dev { background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); padding: 16px 0; }
+.footer-dev-inner { display: flex; align-items: center; justify-content: center; gap: 16px; }
+#dev-qrcode { display: flex; align-items: center; justify-content: center; }
+#dev-qrcode img, #dev-qrcode canvas { border-radius: 6px; display: block; }
+.footer-dev-info { display: flex; flex-direction: column; gap: 3px; }
+.footer-dev-label { color: rgba(255,255,255,0.35); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-dev-name { color: rgba(255,255,255,0.75); font-size: 14px; font-weight: 600; text-decoration: none; transition: var(--transition); }
+.footer-dev-name:hover { color: var(--primary); }
+.footer-dev-hint { color: rgba(255,255,255,0.3); font-size: 11px; }
+.footer-dev-hint i { margin-right: 4px; }
+
 /* SEARCH BAR */
 .search-bar { position: relative; margin-bottom: 32px; }
 .search-bar input { width: 100%; padding: 14px 20px 14px 50px; border: 2px solid var(--border); border-radius: 50px; font-size: 15px; outline: none; transition: var(--transition); }

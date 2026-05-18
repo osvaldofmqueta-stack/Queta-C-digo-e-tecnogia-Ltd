@@ -67,9 +67,32 @@ $categorias = getCategoriasManual();
             </div>
         </div>
     </div>
+    <div class="footer-dev">
+        <div class="container">
+            <div class="footer-dev-inner">
+                <div id="dev-qrcode"></div>
+                <div class="footer-dev-info">
+                    <span class="footer-dev-label">Desenvolvido por</span>
+                    <a href="https://web.facebook.com/osvaldo.queta" target="_blank" class="footer-dev-name">Osvaldo Queta</a>
+                    <span class="footer-dev-hint"><i class="fas fa-qrcode"></i> Aponte a câmara para o QR Code</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
 
 <script src="<?= $rootPath ?>assets/js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+new QRCode(document.getElementById("dev-qrcode"), {
+    text: "https://web.facebook.com/osvaldo.queta",
+    width: 80,
+    height: 80,
+    colorDark: "#ffffff",
+    colorLight: "transparent",
+    correctLevel: QRCode.CorrectLevel.M
+});
+</script>
 <?= isset($extraScripts) ? $extraScripts : '' ?>
 </body>
 </html>
