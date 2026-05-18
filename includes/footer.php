@@ -89,7 +89,7 @@ new QRCode(document.getElementById("dev-qrcode"), {
     width: 80,
     height: 80,
     colorDark: "#ffffff",
-    colorLight: "transparent",
+    colorLight: "#1a1f2e",
     correctLevel: QRCode.CorrectLevel.M
 });
 </script>
