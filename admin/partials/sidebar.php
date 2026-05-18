@@ -25,6 +25,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         <a href="aplicacoes.php" class="<?= $currentFile=='aplicacoes.php'?'active':'' ?>">
             <i class="fas fa-graduation-cap"></i> Aplicações
         </a>
+        <a href="acessos.php" class="<?= $currentFile=='acessos.php'?'active':'' ?>">
+            <i class="fas fa-sign-in-alt"></i> Perfis de Acesso
+        </a>
         <a href="carousel.php" class="<?= $currentFile=='carousel.php'?'active':'' ?>">
             <i class="fas fa-images"></i> Carousel / Banners
         </a>

@@ -19,12 +19,19 @@ if (!$app) {
 
 $whatsapp = getWhatsappLink();
 
-$perfis = [
-    ['icone' => 'fa-crown',            'titulo' => 'Diretor / Admin',       'desc' => 'Acesso total ao sistema, relatórios e configurações gerais.',        'cor' => '#C0392B'],
-    ['icone' => 'fa-building-columns', 'titulo' => 'Secretaria',            'desc' => 'Matrículas, documentos, processos administrativos e propinas.',       'cor' => '#0066FF'],
-    ['icone' => 'fa-chalkboard-user',  'titulo' => 'Professor',             'desc' => 'Lançamento de notas, presenças, sumários e materiais didáticos.',     'cor' => '#00A37A'],
-    ['icone' => 'fa-user-graduate',    'titulo' => 'Aluno',                 'desc' => 'Consulta de notas, horários, mensagens e materiais de apoio.',        'cor' => '#F5A623'],
-    ['icone' => 'fa-people-roof',      'titulo' => 'Encarregado',           'desc' => 'Acompanhamento do educando: notas, presenças e comunicados.',         'cor' => '#8B5CF6'],
+$db = getDB();
+$stmtPerfis = $db->prepare("SELECT * FROM perfis_acesso WHERE aplicacao_id=? AND ativo=1 ORDER BY ordem, titulo");
+$stmtPerfis->execute([$id]);
+$perfisDB = $stmtPerfis->fetchAll();
+
+$perfis = !empty($perfisDB) ? array_map(fn($p) => [
+    'icone' => $p['icone'], 'titulo' => $p['titulo'], 'desc' => $p['descricao'], 'cor' => $p['cor']
+], $perfisDB) : [
+    ['icone' => 'fa-crown',            'titulo' => 'Diretor / Admin',  'desc' => 'Acesso total ao sistema, relatórios e configurações gerais.',   'cor' => '#C0392B'],
+    ['icone' => 'fa-building-columns', 'titulo' => 'Secretaria',       'desc' => 'Matrículas, documentos, processos administrativos e propinas.', 'cor' => '#0066FF'],
+    ['icone' => 'fa-chalkboard-user',  'titulo' => 'Professor',        'desc' => 'Lançamento de notas, presenças, sumários e materiais.',         'cor' => '#00A37A'],
+    ['icone' => 'fa-user-graduate',    'titulo' => 'Aluno',            'desc' => 'Consulta de notas, horários, mensagens e materiais de apoio.',  'cor' => '#F5A623'],
+    ['icone' => 'fa-people-roof',      'titulo' => 'Encarregado',      'desc' => 'Acompanhamento do educando: notas, presenças e comunicados.',   'cor' => '#8B5CF6'],
 ];
 ?>
 <?php include 'includes/header.php'; ?>
