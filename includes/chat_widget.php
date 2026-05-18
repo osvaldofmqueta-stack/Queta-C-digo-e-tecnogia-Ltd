@@ -51,9 +51,25 @@ $_chatRootPath = isset($rootPath) ? $rootPath : '/';
 
 <script>
 let _chatToken = localStorage.getItem('chat_token') || null;
-let _chatUltimoId = 0;
+let _chatUltimoId = parseInt(localStorage.getItem('chat_ultimo_id') || '0');
 let _chatInterval = null;
 let _chatAberto = false;
+const _chatAudioCtx = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
+
+function _chatPlaySound() {
+    try {
+        if (!_chatAudioCtx) return;
+        const osc = _chatAudioCtx.createOscillator();
+        const gain = _chatAudioCtx.createGain();
+        osc.connect(gain); gain.connect(_chatAudioCtx.destination);
+        osc.frequency.setValueAtTime(1046, _chatAudioCtx.currentTime);
+        osc.frequency.setValueAtTime(1318, _chatAudioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.25, _chatAudioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, _chatAudioCtx.currentTime + 0.35);
+        osc.start(_chatAudioCtx.currentTime);
+        osc.stop(_chatAudioCtx.currentTime + 0.35);
+    } catch(e) {}
+}
 
 function chatToggle() {
     _chatAberto = !_chatAberto;
@@ -97,11 +113,21 @@ function chatEnviar() {
     if (!msg || !_chatToken) return;
     input.value = '';
     chatAdicionarMsg({ de: 'visitante', mensagem: msg, criado_em: new Date().toISOString() });
+    chatMostrarDigitando(true);
     const fd = new FormData();
     fd.append('acao', 'enviar');
     fd.append('token', _chatToken);
     fd.append('mensagem', msg);
     fetch('<?= $_chatRootPath ?>api/chat.php', { method: 'POST', body: fd });
+}
+
+function chatMostrarDigitando(mostrar) {
+    const t = document.getElementById('chat-typing');
+    if (t) t.style.display = mostrar ? 'flex' : 'none';
+    if (mostrar) {
+        const lista = document.getElementById('chat-msgs-list');
+        if (lista) lista.scrollTop = lista.scrollHeight;
+    }
 }
 
 function chatCarregarMensagens(inicial = false) {
@@ -112,17 +138,30 @@ function chatCarregarMensagens(inicial = false) {
             d.msgs.forEach(m => {
                 if (m.id > _chatUltimoId) {
                     _chatUltimoId = m.id;
+                    localStorage.setItem('chat_ultimo_id', _chatUltimoId);
                     chatAdicionarMsg(m);
-                    if (!_chatAberto && m.de !== 'visitante') {
-                        document.getElementById('chat-badge').style.display = 'flex';
+                    if (m.de === 'admin') {
+                        // Admin replied! Play sound and show notification
+                        _chatPlaySound();
+                        if (!_chatAberto) {
+                            document.getElementById('chat-badge').style.display = 'flex';
+                            // Flash browser tab
+                            if (!document._chatFlash) {
+                                const orig = document.title;
+                                let on = true;
+                                document._chatFlash = setInterval(() => {
+                                    document.title = on ? '💬 Resposta recebida!' : orig;
+                                    on = !on;
+                                }, 900);
+                                setTimeout(() => { clearInterval(document._chatFlash); document._chatFlash = null; document.title = orig; }, 7000);
+                            }
+                        }
+                        chatMostrarDigitando(false);
                     }
                 }
             });
         }
-        if (inicial && d.msgs) {
-            d.msgs.forEach(m => { if (m.id > _chatUltimoId) _chatUltimoId = m.id; });
-        }
-    });
+    }).catch(() => {});
 }
 
 function chatAdicionarMsg(m) {
