@@ -16,6 +16,7 @@ $whatsapp = getWhatsappLink();
 
 $firstApp = !empty($aplicacoes) ? $aplicacoes[0] : null;
 $audiencia = $firstApp ? getTargetAudience($firstApp['id']) : [];
+$planos = $firstApp ? getPlanos($firstApp['id']) : [];
 ?>
 <?php include 'includes/header.php'; ?>
 
@@ -189,6 +190,58 @@ $audiencia = $firstApp ? getTargetAudience($firstApp['id']) : [];
             </div>
             <?php endforeach; ?>
         </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- PLANOS / PREÇOS -->
+<?php if (!empty($planos)): ?>
+<section class="planos-section" id="planos">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge"><i class="fas fa-tags"></i> Planos & Preços</span>
+            <h2 class="section-title">Escolha o Plano Certo para a sua Escola</h2>
+            <p class="section-subtitle">Planos flexíveis adaptados ao tamanho e necessidades da sua instituição. Sem surpresas, sem custos ocultos.</p>
+        </div>
+        <div class="planos-grid">
+            <?php foreach ($planos as $plano):
+                $itens = getPlanoItens($plano['id']);
+            ?>
+            <div class="plano-card <?= $plano['destaque'] ? 'plano-destaque' : '' ?>">
+                <?php if ($plano['badge']): ?>
+                <div class="plano-badge"><?= h($plano['badge']) ?></div>
+                <?php endif; ?>
+                <div class="plano-header" style="border-top: 4px solid <?= h($plano['cor']) ?>;">
+                    <h3 class="plano-nome"><?= h($plano['nome']) ?></h3>
+                    <?php if ($plano['descricao']): ?>
+                    <p class="plano-desc"><?= h($plano['descricao']) ?></p>
+                    <?php endif; ?>
+                    <div class="plano-preco">
+                        <span class="plano-valor"><?= h($plano['preco']) ?></span>
+                        <span class="plano-periodo">/ <?= h($plano['periodo']) ?></span>
+                    </div>
+                </div>
+                <ul class="plano-itens">
+                    <?php foreach ($itens as $item): ?>
+                    <li class="<?= $item['incluido'] ? 'incluido' : 'nao-incluido' ?>">
+                        <i class="fas <?= $item['incluido'] ? 'fa-check-circle' : 'fa-times-circle' ?>"></i>
+                        <?= h($item['descricao']) ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <div class="plano-footer">
+                    <a href="<?= getWhatsappLink() ?>" target="_blank" class="plano-btn" style="background: <?= $plano['destaque'] ? h($plano['cor']) : 'transparent' ?>; color: <?= $plano['destaque'] ? 'white' : h($plano['cor']) ?>; border-color: <?= h($plano['cor']) ?>;">
+                        <i class="fab fa-whatsapp"></i> Contratar Plano
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <p style="text-align:center; margin-top:28px; color:var(--text-light); font-size:14px;">
+            <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+            Todos os planos incluem 30 dias de teste grátis. Precisa de uma solução personalizada?
+            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco</a>.
+        </p>
     </div>
 </section>
 <?php endif; ?>

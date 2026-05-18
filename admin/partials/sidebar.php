@@ -16,6 +16,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         </a>
 
         <div class="admin-nav-section">Conteúdo</div>
+        <a href="planos.php" class="<?= $currentFile=='planos.php'?'active':'' ?>">
+            <i class="fas fa-tags"></i> Planos & Preços
+        </a>
         <a href="aplicacoes.php" class="<?= $currentFile=='aplicacoes.php'?'active':'' ?>">
             <i class="fas fa-graduation-cap"></i> Aplicações
         </a>

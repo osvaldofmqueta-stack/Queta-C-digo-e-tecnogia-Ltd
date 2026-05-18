@@ -121,6 +121,31 @@ function initDB($db) {
             ordem INTEGER DEFAULT 0,
             FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
         );
+
+        CREATE TABLE IF NOT EXISTS planos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            aplicacao_id INTEGER,
+            nome TEXT NOT NULL,
+            preco TEXT NOT NULL,
+            periodo TEXT DEFAULT 'mês',
+            descricao TEXT,
+            destaque INTEGER DEFAULT 0,
+            ativo INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            cor TEXT DEFAULT '#0066FF',
+            badge TEXT DEFAULT '',
+            criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (aplicacao_id) REFERENCES aplicacoes(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS plano_itens (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            plano_id INTEGER NOT NULL,
+            descricao TEXT NOT NULL,
+            incluido INTEGER DEFAULT 1,
+            ordem INTEGER DEFAULT 0,
+            FOREIGN KEY (plano_id) REFERENCES planos(id)
+        );
     ");
 
     $check = $db->query("SELECT COUNT(*) as c FROM admin_usuarios")->fetch();
@@ -177,6 +202,46 @@ function initDB($db) {
             ($appId, 'Escolas Secundárias', 'Controlo completo de matrículas, avaliações e propinas para o ensino secundário.', 'fa-graduation-cap', 2),
             ($appId, 'Institutos e Faculdades', 'Solução escalável para instituições de ensino superior com múltiplos cursos.', 'fa-university', 3),
             ($appId, 'Centros de Formação', 'Gestão de turmas, certificados e pagamentos para centros de formação profissional.', 'fa-chalkboard-teacher', 4)");
+
+        $checkPlanos = $db->query("SELECT COUNT(*) as c FROM planos")->fetch();
+        if ($checkPlanos['c'] == 0) {
+            $db->exec("INSERT INTO planos (aplicacao_id, nome, preco, periodo, descricao, destaque, ativo, ordem, cor, badge) VALUES
+                ($appId, 'Básico', '25.000 Kz', 'mês', 'Ideal para escolas pequenas que estão a começar a digitalizar a gestão.', 0, 1, 1, '#57606A', ''),
+                ($appId, 'Profissional', '55.000 Kz', 'mês', 'A escolha mais popular para escolas em crescimento com múltiplas turmas.', 1, 1, 2, '#0066FF', 'Mais Popular'),
+                ($appId, 'Enterprise', '95.000 Kz', 'mês', 'Solução completa para grandes instituições com múltiplos campi.', 0, 1, 3, '#00C896', '')");
+
+            $p1 = $db->lastInsertId() - 2;
+            $p2 = $p1 + 1;
+            $p3 = $p1 + 2;
+
+            $db->exec("INSERT INTO plano_itens (plano_id, descricao, incluido, ordem) VALUES
+                ($p1, 'Até 200 alunos', 1, 1),
+                ($p1, 'Gestão de matrículas', 1, 2),
+                ($p1, 'Livro de notas digital', 1, 3),
+                ($p1, 'Controlo de propinas', 1, 4),
+                ($p1, 'Relatórios básicos', 1, 5),
+                ($p1, 'App para pais', 0, 6),
+                ($p1, 'Múltiplos campi', 0, 7),
+                ($p1, 'Suporte prioritário', 0, 8),
+
+                ($p2, 'Até 1.000 alunos', 1, 1),
+                ($p2, 'Gestão de matrículas', 1, 2),
+                ($p2, 'Livro de notas digital', 1, 3),
+                ($p2, 'Controlo de propinas', 1, 4),
+                ($p2, 'Relatórios avançados', 1, 5),
+                ($p2, 'App para pais', 1, 6),
+                ($p2, 'Múltiplos campi', 0, 7),
+                ($p2, 'Suporte prioritário', 1, 8),
+
+                ($p3, 'Alunos ilimitados', 1, 1),
+                ($p3, 'Gestão de matrículas', 1, 2),
+                ($p3, 'Livro de notas digital', 1, 3),
+                ($p3, 'Controlo de propinas', 1, 4),
+                ($p3, 'Relatórios avançados', 1, 5),
+                ($p3, 'App para pais', 1, 6),
+                ($p3, 'Múltiplos campi', 1, 7),
+                ($p3, 'Suporte prioritário', 1, 8)");
+        }
 
         $db->exec("INSERT INTO configuracoes (chave, valor) VALUES
             ('site_nome', 'Queta Código e Tecnologia, Ltd'),

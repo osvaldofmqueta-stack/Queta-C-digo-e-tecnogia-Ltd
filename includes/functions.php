@@ -102,6 +102,25 @@ function getTargetAudience($aplicacaoId) {
     return $stmt->fetchAll();
 }
 
+function getPlanos($aplicacaoId = null, $apenasAtivos = true) {
+    $db = getDB();
+    $sql = "SELECT * FROM planos WHERE 1=1";
+    $params = [];
+    if ($apenasAtivos) $sql .= " AND ativo=1";
+    if ($aplicacaoId) { $sql .= " AND aplicacao_id=?"; $params[] = $aplicacaoId; }
+    $sql .= " ORDER BY ordem";
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+function getPlanoItens($planoId) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM plano_itens WHERE plano_id=? ORDER BY ordem");
+    $stmt->execute([$planoId]);
+    return $stmt->fetchAll();
+}
+
 function getPerguntasPublicadas($topicoId = null, $limite = null) {
     $db = getDB();
     $sql = "SELECT p.*, t.titulo as topico_titulo FROM perguntas p LEFT JOIN topicos_manual t ON p.topico_id=t.id WHERE p.publicado=1 AND p.respondido=1";
