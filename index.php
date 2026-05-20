@@ -20,50 +20,129 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 ?>
 <?php include 'includes/header.php'; ?>
 
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-logo"><span>Q</span>ueta·Tech</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
 <!-- HERO CAROUSEL -->
 <section class="hero-carousel">
+    <canvas id="hero-particles" style="width:100%;height:100%;"></canvas>
     <div class="carousel-track">
-        <?php if (empty($slides)): ?>
-        <div class="carousel-slide">
-            <div class="carousel-slide-bg" style="background: linear-gradient(135deg, #0D1117, #161B22);"></div>
+        <?php
+        $heroImages = [
+            'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=80',
+            'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1400&q=80',
+            'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1400&q=80',
+        ];
+        if (empty($slides)):
+        ?>
+        <div class="carousel-slide active-slide">
+            <div class="carousel-slide-bg" style="background-image: url('<?= $heroImages[0] ?>');"></div>
             <div class="carousel-slide-content">
-                <h2>Bem-vindo à Queta Código e Tecnologia</h2>
-                <p>Soluções tecnológicas inovadoras para a educação moderna.</p>
-                <a href="<?= $demoLink ?>" class="btn-primary"><i class="fas fa-play-circle"></i> Ver Demonstração</a>
+                <div class="hero-badge"><i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola</div>
+                <h2>Bem-vindo à<br><span class="typewriter-wrap"><span id="typewriter" data-words="Queta Tech|Super Escola|Gestão Escolar|Inovação Educacional"></span><span class="typewriter-cursor"></span></span></h2>
+                <p>Soluções tecnológicas inovadoras para a gestão educacional moderna.</p>
+                <div class="hero-actions" style="display:flex;gap:14px;flex-wrap:wrap;">
+                    <a href="<?= $demoLink ?>" class="btn-primary"><i class="fas fa-play-circle"></i> Ver Demonstração</a>
+                    <a href="<?= $whatsapp ?>" target="_blank" class="btn-outline-white"><i class="fab fa-whatsapp"></i> Falar Connosco</a>
+                </div>
+                <div class="hero-stats-row">
+                    <div class="hero-stat"><div class="hs-num">79+</div><div class="hs-label">Funcionalidades</div></div>
+                    <div class="hero-stat"><div class="hs-num">3</div><div class="hs-label">Planos</div></div>
+                    <div class="hero-stat"><div class="hs-num">100%</div><div class="hs-label">Suporte Incluído</div></div>
+                </div>
             </div>
         </div>
-        <?php else: foreach ($slides as $slide): ?>
-        <div class="carousel-slide">
+        <?php else: foreach ($slides as $si => $slide): ?>
+        <div class="carousel-slide <?= $si === 0 ? 'active-slide' : '' ?>">
             <div class="carousel-slide-bg" style="background-image: url('<?php
                 $img = $slide['imagem'];
                 if ($img && file_exists($img)) echo h($img);
-                else echo 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=80';
+                else echo $heroImages[$si % count($heroImages)];
             ?>');">
             </div>
             <div class="carousel-slide-content">
+                <?php if ($si === 0): ?>
+                <div class="hero-badge"><i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola</div>
+                <?php endif; ?>
                 <h2><?= h($slide['titulo']) ?></h2>
                 <?php if ($slide['descricao']): ?><p><?= h($slide['descricao']) ?></p><?php endif; ?>
-                <?php if ($slide['link']): ?>
-                <a href="<?= h($slide['link']) ?>" class="btn-primary"><i class="fas fa-arrow-right"></i> Saber Mais</a>
-                <?php endif; ?>
+                <div class="hero-actions" style="display:flex;gap:14px;flex-wrap:wrap;">
+                    <?php if ($slide['link']): ?>
+                    <a href="<?= h($slide['link']) ?>" class="btn-primary"><i class="fas fa-arrow-right"></i> Saber Mais</a>
+                    <?php endif; ?>
+                    <a href="<?= $whatsapp ?>" target="_blank" class="btn-outline-white"><i class="fab fa-whatsapp"></i> Falar Connosco</a>
+                </div>
             </div>
         </div>
         <?php endforeach; endif; ?>
     </div>
 
+    <button class="carousel-btn prev carousel-arrow-left"><i class="fas fa-chevron-left"></i></button>
+    <button class="carousel-btn next carousel-arrow-right"><i class="fas fa-chevron-right"></i></button>
     <div class="carousel-controls">
-        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
         <div class="carousel-dots">
             <?php $count = empty($slides) ? 1 : count($slides); for ($i = 0; $i < $count; $i++): ?>
             <button class="carousel-dot <?= $i === 0 ? 'active' : '' ?>"></button>
             <?php endfor; ?>
         </div>
-        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
 </section>
 
+<!-- TRUST BAR -->
+<div class="trust-bar reveal">
+    <div class="container">
+        <div class="trust-items">
+            <div class="trust-item"><i class="fas fa-shield-alt"></i> <span>Dados 100% Seguros</span></div>
+            <div class="trust-divider"></div>
+            <div class="trust-item"><i class="fas fa-headset"></i> <span>Suporte Técnico Incluído</span></div>
+            <div class="trust-divider"></div>
+            <div class="trust-item"><i class="fas fa-cloud"></i> <span>Acesso Online 24/7</span></div>
+            <div class="trust-divider"></div>
+            <div class="trust-item"><i class="fas fa-graduation-cap"></i> <span>Formação Incluída</span></div>
+            <div class="trust-divider"></div>
+            <div class="trust-item"><i class="fas fa-sync-alt"></i> <span>Actualizações Grátis</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- STATS COUNTERS -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid-main">
+            <div class="stat-item reveal" data-delay="0">
+                <div class="stat-item-icon"><i class="fas fa-puzzle-piece"></i></div>
+                <span class="counter-num" data-target="79" data-suffix="+">0+</span>
+                <div class="stat-label">Funcionalidades</div>
+            </div>
+            <div class="stat-item reveal" data-delay="100">
+                <div class="stat-item-icon green"><i class="fas fa-school"></i></div>
+                <span class="counter-num" data-target="100" data-suffix="+">0+</span>
+                <div class="stat-label">Escolas Clientes</div>
+            </div>
+            <div class="stat-item reveal" data-delay="200">
+                <div class="stat-item-icon orange"><i class="fas fa-tags"></i></div>
+                <span class="counter-num" data-target="3" data-suffix="">0</span>
+                <div class="stat-label">Planos Disponíveis</div>
+            </div>
+            <div class="stat-item reveal" data-delay="300">
+                <div class="stat-item-icon ruby"><i class="fas fa-headset"></i></div>
+                <span class="counter-num" data-target="24" data-suffix="/7">0/7</span>
+                <div class="stat-label">Suporte Disponível</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
 <!-- LOGO / BRAND BANNER -->
-<div class="logo-banner" id="sobre">
+<div class="logo-banner reveal" id="sobre">
     <div class="container">
         <div class="logo-banner-content">
             <div class="logo-banner-text">
@@ -85,14 +164,14 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <!-- NAVEGUE POR CATEGORIA / APLICAÇÕES -->
 <section class="apps-section" id="aplicacoes">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
             <span class="section-badge"><i class="fas fa-th-large"></i> As Nossas Soluções</span>
             <h2 class="section-title">Navegue por Categoria</h2>
             <p class="section-subtitle">Descubra as nossas aplicações desenvolvidas para modernizar a gestão educacional</p>
         </div>
         <div class="apps-grid">
-            <?php foreach ($aplicacoes as $app): ?>
-            <div class="app-card" onclick="window.location='aplicacao.php?id=<?= $app['id'] ?>'">
+            <?php foreach ($aplicacoes as $ai => $app): ?>
+            <div class="app-card reveal" data-delay="<?= $ai * 100 ?>" onclick="window.location='aplicacao.php?id=<?= $app['id'] ?>'">
                 <div class="app-card-icon">
                     <i class="fas fa-graduation-cap"></i>
                 </div>
@@ -106,22 +185,24 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 </section>
 
 <!-- FUNCIONALIDADES EM DESTAQUE -->
-<?php if (!empty($destaques)): ?>
+<?php if (!empty($destaques)):
+$featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments','fa-chart-bar','fa-mobile-alt'];
+?>
 <section class="features-section" id="funcionalidades">
     <div class="container">
-        <div class="section-header">
-            <span class="section-badge"><i class="fas fa-star"></i> Novidades</span>
+        <div class="section-header reveal">
+            <span class="section-badge"><i class="fas fa-star"></i> Destaques</span>
             <h2 class="section-title">Funcionalidades em Destaque</h2>
-            <p class="section-subtitle">As funcionalidades mais recentes que estão a transformar a gestão escolar</p>
+            <p class="section-subtitle">As funcionalidades que estão a transformar a gestão escolar em Angola</p>
         </div>
         <div class="features-grid">
-            <?php foreach ($destaques as $f): ?>
-            <div class="feature-card">
+            <?php foreach ($destaques as $fi => $f): ?>
+            <div class="feature-card reveal" data-delay="<?= ($fi % 3) * 100 ?>">
                 <div class="feature-card-img">
                     <?php if ($f['imagem'] && file_exists($f['imagem'])): ?>
                         <img src="<?= h($f['imagem']) ?>" alt="<?= h($f['titulo']) ?>">
                     <?php else: ?>
-                        <i class="fas fa-puzzle-piece"></i>
+                        <i class="fas <?= $featureIcons[$fi % count($featureIcons)] ?>"></i>
                     <?php endif; ?>
                 </div>
                 <div class="feature-card-body">
@@ -140,10 +221,16 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <section class="demo-section" id="demo">
     <div class="container">
         <div class="demo-grid">
-            <div class="demo-content">
-                <span class="section-badge"><i class="fas fa-play-circle"></i> Demo</span>
+            <div class="demo-content reveal from-left">
+                <span class="section-badge"><i class="fas fa-play-circle"></i> Demo ao Vivo</span>
                 <h2>Simplifique a gestão da sua escola e gere mais receita!</h2>
                 <p>O Super Escola é o sistema ERP académico que transforma a gestão da sua instituição de ensino. Matrículas, notas, propinas e comunicação — tudo numa única plataforma simples e eficiente.</p>
+                <ul style="list-style:none;margin:0 0 28px;display:flex;flex-direction:column;gap:10px;">
+                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Gestão completa de matrículas e propinas</li>
+                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Lançamento de notas e pautas digitais</li>
+                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Portal para pais, alunos e professores</li>
+                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Relatórios financeiros e académicos automáticos</li>
+                </ul>
                 <div class="demo-btns">
                     <a href="<?= $whatsapp ?>" target="_blank" class="btn-primary">
                         <i class="fas fa-calendar-alt"></i> Agenda uma Demonstração
@@ -153,7 +240,7 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
                     </a>
                 </div>
             </div>
-            <div class="demo-video">
+            <div class="demo-video reveal from-right">
                 <div class="video-wrapper">
                     <?php if ($videoUrl): ?>
                     <div class="video-placeholder" id="video-wrapper" onclick="playVideo('<?= h($videoUrl) ?>')">
@@ -172,18 +259,20 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
     </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- PARA QUEM É INDICADO -->
 <?php if (!empty($audiencia)): ?>
 <section class="audience-section" id="para-quem">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
             <span class="section-badge"><i class="fas fa-users"></i> Para Quem É</span>
             <h2 class="section-title">Para Quem é Indicado o Super Escola?</h2>
-            <p class="section-subtitle">Desenvolvido para todos os tipos de instituições de ensino</p>
+            <p class="section-subtitle">Desenvolvido para todos os tipos de instituições de ensino em Angola e África</p>
         </div>
         <div class="audience-grid">
-            <?php foreach ($audiencia as $aud): ?>
-            <div class="audience-card">
+            <?php foreach ($audiencia as $ai => $aud): ?>
+            <div class="audience-card reveal" data-delay="<?= $ai * 80 ?>">
                 <div class="audience-card-icon"><i class="fas <?= h($aud['icone']) ?>"></i></div>
                 <h4><?= h($aud['titulo']) ?></h4>
                 <p><?= h($aud['descricao']) ?></p>
@@ -200,21 +289,21 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 ?>
 <section class="planos-section" id="planos">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
             <span class="section-badge"><i class="fas fa-tags"></i> Planos & Preços</span>
             <h2 class="section-title">Escolha o Plano Certo para a sua Escola</h2>
             <p class="section-subtitle">Planos flexíveis com funcionalidades pensadas para todos os tipos de instituições de ensino.</p>
         </div>
         <div class="planos-grid">
-            <?php foreach ($planos as $plano):
+            <?php foreach ($planos as $pi => $plano):
                 $itens = getPlanoItens($plano['id']);
                 $icon = $planoIcons[$plano['nome']] ?? '🎓';
                 $numItens = count($itens);
             ?>
-            <div class="plano-card <?= $plano['destaque'] ? 'plano-destaque' : '' ?>">
-                <div class="plano-header" style="background: <?= h($plano['cor']) ?>; border-top: none;">
+            <div class="plano-card <?= $plano['destaque'] ? 'plano-destaque' : '' ?> reveal" data-delay="<?= $pi * 120 ?>">
+                <div class="plano-header" style="background: linear-gradient(135deg, <?= h($plano['cor']) ?>, <?= h($plano['cor']) ?>dd); border-top: none;">
                     <div class="plano-icon-row">
-                        <span class="plano-emoji"><?= $icon ?></span>
+                        <span class="plano-emoji" style="font-size:36px;"><?= $icon ?></span>
                         <?php if ($plano['badge']): ?>
                         <span class="plano-count-badge"><?= h($plano['badge']) ?></span>
                         <?php endif; ?>
@@ -254,18 +343,18 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
             </div>
             <?php endforeach; ?>
         </div>
-        <p style="text-align:center; margin-top:32px; color:var(--text-light); font-size:14px;">
-            <i class="fas fa-info-circle" style="color:var(--primary);"></i>
-            Todos os planos incluem suporte de instalação. Precisa de uma proposta personalizada?
-            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:600;">Fale connosco pelo WhatsApp</a>.
-        </p>
+        <div class="reveal" style="text-align:center; margin-top:28px; padding:18px 24px; background:linear-gradient(135deg,#f0f7ff,#e8f4ff); border-radius:14px; font-size:14px; border:1px solid rgba(0,102,255,0.12);">
+            <i class="fas fa-shield-alt" style="color:var(--primary);margin-right:6px;"></i>
+            Todos os planos incluem suporte de instalação e formação.
+            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:700; margin-left:4px;"><i class="fab fa-whatsapp"></i> Fale connosco para uma proposta personalizada</a>.
+        </div>
         <?php if (!clienteLogado()): ?>
-        <div style="text-align:center; margin-top:16px; padding:14px 20px; background:#f0f7ff; border-radius:10px; font-size:14px;">
+        <div class="reveal" style="text-align:center; margin-top:12px; padding:14px 20px; background:#f0f7ff; border-radius:10px; font-size:14px;">
             <i class="fas fa-user-circle" style="color:var(--primary);"></i>
             Para adicionar ao carrinho, <a href="/registro.php" style="color:var(--primary);font-weight:600;">crie uma conta grátis</a> ou <a href="/login.php" style="color:var(--primary);font-weight:600;">entre na sua conta</a>.
         </div>
         <?php endif; ?>
-        <div style="text-align:center; margin-top:20px;">
+        <div class="reveal" style="text-align:center; margin-top:20px;">
             <a href="planos-comparacao.php" class="btn-secondary">
                 <i class="fas fa-table"></i> Ver Comparação Completa das 79 Funcionalidades
             </a>
@@ -275,19 +364,21 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <?php endif; ?>
 
 <!-- MANUAL DE APOIO DESTAQUES -->
-<?php if (!empty($recentTopicos)): ?>
+<?php if (!empty($recentTopicos)):
+$topicIcons = ['fa-rocket','fa-book','fa-cog','fa-chart-bar'];
+?>
 <section style="background:white; padding:64px 0;">
     <div class="container">
-        <div class="section-header">
-            <span class="section-badge"><i class="fas fa-book-open"></i> Manual</span>
+        <div class="section-header reveal">
+            <span class="section-badge"><i class="fas fa-book-open"></i> Manual de Apoio</span>
             <h2 class="section-title">Artigos Recentes do Manual</h2>
             <p class="section-subtitle">Guias e tutoriais para tirar o máximo proveito do Super Escola</p>
         </div>
         <div class="features-grid">
-            <?php foreach ($recentTopicos as $t): ?>
-            <div class="feature-card" onclick="window.location='manual/topico.php?id=<?= $t['id'] ?>'" style="cursor:pointer;">
+            <?php foreach ($recentTopicos as $ti => $t): ?>
+            <div class="feature-card reveal" data-delay="<?= ($ti % 4) * 100 ?>" onclick="window.location='manual/topico.php?id=<?= $t['id'] ?>'" style="cursor:pointer;">
                 <div class="feature-card-img">
-                    <i class="fas fa-file-alt"></i>
+                    <i class="fas <?= $topicIcons[$ti % count($topicIcons)] ?>"></i>
                 </div>
                 <div class="feature-card-body">
                     <span class="feature-badge"><?= h($t['categoria_nome']) ?></span>
@@ -297,7 +388,7 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
             </div>
             <?php endforeach; ?>
         </div>
-        <div style="text-align:center; margin-top:32px;">
+        <div class="reveal" style="text-align:center; margin-top:32px;">
             <a href="manual/" class="btn-secondary"><i class="fas fa-book"></i> Ver Todo o Manual</a>
         </div>
     </div>
@@ -307,18 +398,25 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <!-- FALA CONNOSCO CTA -->
 <section class="contact-cta-section" id="contacto">
     <div class="container">
-        <h2><i class="fab fa-whatsapp"></i> Fala Connosco</h2>
-        <p>Tem dúvidas sobre o Super Escola? A nossa equipa está pronta para ajudar!</p>
-        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-            <a href="<?= $whatsapp ?>" target="_blank" class="btn-whatsapp-large">
-                <i class="fab fa-whatsapp"></i> Enviar Mensagem no WhatsApp
-            </a>
-            <a href="mailto:<?= h(getConfig('site_email', 'geral@queta.ao')) ?>" class="btn-outline-white" style="border-color:white;color:white;">
-                <i class="fas fa-envelope"></i> Enviar Email
-            </a>
+        <div class="reveal" style="max-width:600px;margin:0 auto;text-align:center;">
+            <div style="font-size:52px;margin-bottom:16px;animation:bounce 2s infinite;">💬</div>
+            <h2><i class="fab fa-whatsapp"></i> Fala Connosco</h2>
+            <p>Tem dúvidas sobre o Super Escola? A nossa equipa está pronta para ajudar agora mesmo!</p>
+            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+                <a href="<?= $whatsapp ?>" target="_blank" class="btn-whatsapp-large">
+                    <i class="fab fa-whatsapp"></i> Enviar Mensagem no WhatsApp
+                </a>
+                <a href="mailto:<?= h(getConfig('site_email', 'geral@queta.ao')) ?>" class="btn-outline-white" style="border-color:white;color:white;">
+                    <i class="fas fa-envelope"></i> Enviar Email
+                </a>
+            </div>
+            <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.7);"><i class="fas fa-clock"></i> Respondemos em menos de 1 hora nos dias úteis</p>
         </div>
     </div>
 </section>
+<style>
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+</style>
 
 <script>
 function adicionarAoCarrinho(planoId, btn) {
