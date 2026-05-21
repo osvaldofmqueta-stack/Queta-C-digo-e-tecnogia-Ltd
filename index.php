@@ -30,66 +30,110 @@ $planos = $firstApp ? getPlanos($firstApp['id']) : [];
 <div id="scroll-progress"></div>
 
 <!-- HERO CAROUSEL -->
-<section class="hero-carousel">
-    <canvas id="hero-particles" style="width:100%;height:100%;"></canvas>
-    <div class="carousel-track">
-        <?php
-        $heroImages = [
-            'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=80',
-            'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1400&q=80',
-            'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1400&q=80',
+<?php
+$heroImages = [
+    'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1600&q=85',
+    'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=85',
+    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=85',
+];
+$heroSlides = [];
+if (!empty($slides)) {
+    foreach ($slides as $si => $slide) {
+        $img = ($slide['imagem'] && file_exists($slide['imagem'])) ? $slide['imagem'] : $heroImages[$si % count($heroImages)];
+        $heroSlides[] = [
+            'img' => $img,
+            'badge' => $si === 0 ? '<i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola' : '',
+            'title' => h($slide['titulo']),
+            'desc' => h($slide['descricao'] ?? ''),
+            'link' => $slide['link'] ? h($slide['link']) : '#demo',
+            'link_label' => 'Saber Mais',
+            'stats' => false,
         ];
-        if (empty($slides)):
-        ?>
-        <div class="carousel-slide active-slide">
-            <div class="carousel-slide-bg" style="background-image: url('<?= $heroImages[0] ?>');"></div>
+    }
+} else {
+    $heroSlides = [
+        [
+            'img' => $heroImages[0],
+            'badge' => '<i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola',
+            'title' => 'Super Escola &mdash;<br>ERP Académico',
+            'desc' => 'Gerencie matrículas, notas, finanças e muito mais numa só plataforma.',
+            'link' => $demoLink,
+            'link_label' => 'Ver Demonstração',
+            'stats' => true,
+        ],
+        [
+            'img' => $heroImages[1],
+            'badge' => '<i class="fas fa-star"></i> Mais de 79 Funcionalidades Incluídas',
+            'title' => 'Tudo o que a sua<br>escola precisa',
+            'desc' => 'Lançamento de notas, pautas digitais, controlo de propinas e relatórios automáticos.',
+            'link' => '#funcionalidades',
+            'link_label' => 'Ver Funcionalidades',
+            'stats' => false,
+        ],
+        [
+            'img' => $heroImages[2],
+            'badge' => '<i class="fas fa-tags"></i> Planos para todos os tamanhos',
+            'title' => 'Planos flexíveis<br>para cada escola',
+            'desc' => 'Premium, Golden ou Ruby — escolha o plano ideal para a sua instituição de ensino.',
+            'link' => '#planos',
+            'link_label' => 'Ver Planos',
+            'stats' => false,
+        ],
+    ];
+}
+$slideCount = count($heroSlides);
+?>
+<section class="hero-carousel" id="hero">
+    <canvas id="hero-particles"></canvas>
+    <div class="carousel-track">
+        <?php foreach ($heroSlides as $si => $hs): ?>
+        <div class="carousel-slide <?= $si === 0 ? 'active-slide' : '' ?>">
+            <div class="carousel-slide-bg" style="background-image:url('<?= $hs['img'] ?>');"></div>
             <div class="carousel-slide-content">
-                <div class="hero-badge"><i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola</div>
-                <h2>Bem-vindo à<br><span class="typewriter-wrap"><span id="typewriter" data-words="Queta Tech|Super Escola|Gestão Escolar|Inovação Educacional"></span><span class="typewriter-cursor"></span></span></h2>
-                <p>Soluções tecnológicas inovadoras para a gestão educacional moderna.</p>
-                <div class="hero-actions" style="display:flex;gap:14px;flex-wrap:wrap;">
-                    <a href="<?= $demoLink ?>" class="btn-primary"><i class="fas fa-play-circle"></i> Ver Demonstração</a>
+                <?php if ($hs['badge']): ?>
+                <div class="hero-badge"><?= $hs['badge'] ?></div>
+                <?php endif; ?>
+                <h2><?= $hs['title'] ?></h2>
+                <?php if ($hs['desc']): ?><p><?= $hs['desc'] ?></p><?php endif; ?>
+                <div class="hero-actions">
+                    <a href="<?= $hs['link'] ?>" class="btn-primary"><i class="fas fa-arrow-right"></i> <?= $hs['link_label'] ?></a>
                     <a href="<?= $whatsapp ?>" target="_blank" class="btn-outline-white"><i class="fab fa-whatsapp"></i> Falar Connosco</a>
                 </div>
+                <?php if ($hs['stats']): ?>
                 <div class="hero-stats-row">
                     <div class="hero-stat"><div class="hs-num">79+</div><div class="hs-label">Funcionalidades</div></div>
                     <div class="hero-stat"><div class="hs-num">3</div><div class="hs-label">Planos</div></div>
                     <div class="hero-stat"><div class="hs-num">100%</div><div class="hs-label">Suporte Incluído</div></div>
                 </div>
-            </div>
-        </div>
-        <?php else: foreach ($slides as $si => $slide): ?>
-        <div class="carousel-slide <?= $si === 0 ? 'active-slide' : '' ?>">
-            <div class="carousel-slide-bg" style="background-image: url('<?php
-                $img = $slide['imagem'];
-                if ($img && file_exists($img)) echo h($img);
-                else echo $heroImages[$si % count($heroImages)];
-            ?>');">
-            </div>
-            <div class="carousel-slide-content">
-                <?php if ($si === 0): ?>
-                <div class="hero-badge"><i class="fas fa-bolt"></i> Sistema ERP Académico #1 em Angola</div>
                 <?php endif; ?>
-                <h2><?= h($slide['titulo']) ?></h2>
-                <?php if ($slide['descricao']): ?><p><?= h($slide['descricao']) ?></p><?php endif; ?>
-                <div class="hero-actions" style="display:flex;gap:14px;flex-wrap:wrap;">
-                    <?php if ($slide['link']): ?>
-                    <a href="<?= h($slide['link']) ?>" class="btn-primary"><i class="fas fa-arrow-right"></i> Saber Mais</a>
-                    <?php endif; ?>
-                    <a href="<?= $whatsapp ?>" target="_blank" class="btn-outline-white"><i class="fab fa-whatsapp"></i> Falar Connosco</a>
-                </div>
             </div>
         </div>
-        <?php endforeach; endif; ?>
+        <?php endforeach; ?>
     </div>
 
-    <button class="carousel-btn prev carousel-arrow-left"><i class="fas fa-chevron-left"></i></button>
-    <button class="carousel-btn next carousel-arrow-right"><i class="fas fa-chevron-right"></i></button>
+    <!-- Scroll hint -->
+    <div class="carousel-scroll-hint">
+        <div class="scroll-arrow"><div class="scroll-dot"></div></div>
+    </div>
+
+    <!-- Controls bar -->
     <div class="carousel-controls">
-        <div class="carousel-dots">
-            <?php $count = empty($slides) ? 1 : count($slides); for ($i = 0; $i < $count; $i++): ?>
-            <button class="carousel-dot <?= $i === 0 ? 'active' : '' ?>"></button>
+        <div class="carousel-progress-bars">
+            <?php for ($i = 0; $i < $slideCount; $i++): ?>
+            <div class="carousel-prog-bar <?= $i === 0 ? 'active' : '' ?>" data-index="<?= $i ?>">
+                <div class="carousel-prog-bar-fill"></div>
+            </div>
             <?php endfor; ?>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+            <div class="carousel-counter">
+                <span class="carousel-counter-current">01</span>
+                <span style="opacity:0.4;font-size:13px;">/ <?= str_pad($slideCount, 2, '0', STR_PAD_LEFT) ?></span>
+            </div>
+            <div class="carousel-arrows">
+                <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
     </div>
 </section>

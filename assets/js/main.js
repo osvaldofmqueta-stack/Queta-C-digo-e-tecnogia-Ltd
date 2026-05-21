@@ -335,46 +335,69 @@ function hideCookieBanner() {
 }
 
 // =========================================
-// CAROUSEL
+// CAROUSEL — Crossfade + Ken Burns + Progress
 // =========================================
 function initCarousel() {
     const carousel = document.querySelector('.hero-carousel');
     if (!carousel) return;
 
-    const track = carousel.querySelector('.carousel-track');
     const slides = carousel.querySelectorAll('.carousel-slide');
-    const dots = carousel.querySelectorAll('.carousel-dot');
-    if (!track || slides.length === 0) return;
+    const progBars = carousel.querySelectorAll('.carousel-prog-bar');
+    const counter = carousel.querySelector('.carousel-counter-current');
+    if (slides.length === 0) return;
 
     let current = 0;
     let autoPlay;
     let isTransitioning = false;
+    const DURATION = 5500;
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function updateProgress(idx) {
+        progBars.forEach((b, i) => {
+            b.classList.toggle('active', i === idx);
+            // restart animation
+            const fill = b.querySelector('.carousel-prog-bar-fill');
+            if (fill) {
+                fill.style.animation = 'none';
+                fill.offsetHeight; // reflow
+                if (i === idx) fill.style.animation = `progFill ${DURATION}ms linear forwards`;
+                else fill.style.animation = 'none';
+            }
+        });
+        if (counter) counter.textContent = pad(idx + 1);
+    }
 
     function goTo(index) {
-        if (isTransitioning) return;
+        if (isTransitioning && slides.length > 1) return;
         isTransitioning = true;
+        const prev = current;
         current = (index + slides.length) % slides.length;
-        track.style.transform = `translateX(-${current * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('active', i === current));
-        slides.forEach((s, i) => {
-            s.classList.toggle('active-slide', i === current);
-        });
-        setTimeout(() => { isTransitioning = false; }, 700);
+
+        // Crossfade
+        slides[prev].classList.remove('active-slide');
+        slides[current].classList.add('active-slide');
+
+        updateProgress(current);
+        setTimeout(() => { isTransitioning = false; }, 900);
     }
 
     function next() { goTo(current + 1); }
     function prev() { goTo(current - 1); }
 
-    function startAutoPlay() { autoPlay = setInterval(next, 5500); }
+    function startAutoPlay() { autoPlay = setInterval(next, DURATION); }
     function stopAutoPlay() { clearInterval(autoPlay); }
 
-    dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAutoPlay(); goTo(i); startAutoPlay(); }));
+    // Progress bar click
+    progBars.forEach((b, i) => b.addEventListener('click', () => { stopAutoPlay(); goTo(i); startAutoPlay(); }));
 
+    // Arrow buttons
     const prevBtn = carousel.querySelector('.carousel-btn.prev');
     const nextBtn = carousel.querySelector('.carousel-btn.next');
     if (prevBtn) prevBtn.addEventListener('click', () => { stopAutoPlay(); prev(); startAutoPlay(); });
     if (nextBtn) nextBtn.addEventListener('click', () => { stopAutoPlay(); next(); startAutoPlay(); });
 
+    // Touch / swipe
     let touchStartX = 0;
     carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; stopAutoPlay(); }, { passive: true });
     carousel.addEventListener('touchend', e => {
@@ -383,7 +406,16 @@ function initCarousel() {
         startAutoPlay();
     });
 
-    goTo(0);
+    // Keyboard
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') { stopAutoPlay(); prev(); startAutoPlay(); }
+        if (e.key === 'ArrowRight') { stopAutoPlay(); next(); startAutoPlay(); }
+    });
+
+    // Init
+    slides.forEach((s, i) => { if (i !== 0) s.classList.remove('active-slide'); });
+    slides[0].classList.add('active-slide');
+    updateProgress(0);
     startAutoPlay();
 }
 
@@ -399,28 +431,42 @@ function initStickyHeader() {
 }
 
 // =========================================
-// MOBILE MENU
+// MOBILE MENU (Modern Drawer)
 // =========================================
-function toggleMenu() {
-    const menu = document.getElementById('nav-menu');
+function toggleMobileMenu() {
+    const drawer = document.getElementById('mobile-drawer');
     const toggle = document.getElementById('nav-toggle');
-    if (!menu) return;
-    menu.classList.toggle('open');
-    toggle.classList.toggle('open');
-    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    const overlay = document.getElementById('nav-overlay');
+    if (!drawer) return;
+    const isOpen = drawer.classList.contains('open');
+    if (isOpen) {
+        closeMobileMenu();
+    } else {
+        drawer.classList.add('open');
+        toggle && toggle.classList.add('open');
+        overlay && overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileMenu() {
+    const drawer = document.getElementById('mobile-drawer');
+    const toggle = document.getElementById('nav-toggle');
+    const overlay = document.getElementById('nav-overlay');
+    if (drawer) drawer.classList.remove('open');
+    if (toggle) toggle.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 function initMobileMenu() {
-    document.addEventListener('click', function (e) {
-        const menu = document.getElementById('nav-menu');
-        const toggle = document.getElementById('nav-toggle');
-        if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target) && menu.classList.contains('open')) {
-            menu.classList.remove('open');
-            toggle.classList.remove('open');
-            document.body.style.overflow = '';
-        }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMobileMenu();
     });
 }
+
+// Legacy compat
+function toggleMenu() { toggleMobileMenu(); }
 
 // =========================================
 // SEARCH FILTER
@@ -452,8 +498,7 @@ function initSmoothScroll() {
                 const offset = 80;
                 const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
                 window.scrollTo({ top, behavior: 'smooth' });
-                const menu = document.getElementById('nav-menu');
-                if (menu) { menu.classList.remove('open'); document.body.style.overflow = ''; }
+                closeMobileMenu();
             }
         });
     });
