@@ -48,9 +48,8 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                     <img src="<?= $rootPath . h($logo) ?>" alt="<?= h($siteName) ?>" class="logo-img">
                 <?php else: ?>
                     <div class="logo-text">
-                        <span class="logo-q">Q</span><span class="logo-rest">ueta</span>
-                        <span class="logo-dot">·</span>
-                        <span class="logo-tech">Tech</span>
+                        <div class="logo-line1"><span class="logo-q">Q</span><span class="logo-rest">ueta</span></div>
+                        <div class="logo-line2">Código e Tecnologia, Lta.</div>
                     </div>
                 <?php endif; ?>
             </a>
@@ -138,6 +137,12 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
                         $_navCarrinhoQtd = contarCarrinho($_SESSION['cliente_id']);
                     }
                     ?>
+
+                    <!-- Dark/Light toggle -->
+                    <button class="nav-theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Mudar tema" aria-label="Mudar tema">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+
                     <?php if (clienteLogado()): ?>
                     <a href="<?= $rootPath ?>carrinho.php" class="nav-cart-btn" title="Carrinho">
                         <i class="fas fa-shopping-cart"></i>
@@ -197,9 +202,8 @@ $rootPath = isset($rootPath) ? $rootPath : '/';
     <div class="mobile-drawer-inner">
         <div class="mobile-drawer-logo">
             <div class="logo-text">
-                <span class="logo-q">Q</span><span class="logo-rest">ueta</span>
-                <span class="logo-dot">·</span>
-                <span class="logo-tech">Tech</span>
+                <div class="logo-line1"><span class="logo-q">Q</span><span class="logo-rest">ueta</span></div>
+                <div class="logo-line2">Código e Tecnologia, Lta.</div>
             </div>
             <button class="mobile-close-btn" onclick="closeMobileMenu()">
                 <i class="fas fa-times"></i>

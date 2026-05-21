@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initScrollProgress();
     initPageLoader();
     initCookieBanner();
+    initTheme();
     initCarousel();
     initStickyHeader();
     initMobileMenu();
@@ -633,6 +634,37 @@ function showAlert(msg, type = 'success') {
     div.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
     const content = document.querySelector('.admin-content') || document.querySelector('.page-content');
     if (content) { content.prepend(div); setTimeout(() => div.remove(), 5000); }
+}
+
+// =========================================
+// DARK / LIGHT THEME
+// =========================================
+function initTheme() {
+    const saved = localStorage.getItem('theme') || 'light';
+    applyTheme(saved, false);
+}
+
+function toggleTheme() {
+    const current = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next, true);
+    localStorage.setItem('theme', next);
+}
+
+function applyTheme(theme, animate) {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    if (animate) {
+        body.style.transition = 'background 0.35s ease, color 0.35s ease';
+        setTimeout(() => { body.style.transition = ''; }, 400);
+    }
+    if (theme === 'dark') {
+        body.classList.add('dark-mode');
+        if (icon) { icon.className = 'fas fa-sun'; }
+    } else {
+        body.classList.remove('dark-mode');
+        if (icon) { icon.className = 'fas fa-moon'; }
+    }
 }
 
 // CSS helpers
