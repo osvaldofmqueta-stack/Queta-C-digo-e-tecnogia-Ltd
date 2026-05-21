@@ -16,16 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $msg = 'Configurações guardadas com sucesso!';
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações — Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body class="admin-body">
+<?php $pageTitle = 'Configurações'; include 'partials/head.php'; ?>
 <?php include 'partials/sidebar.php'; ?>
 <div class="admin-main">
     <div class="admin-header">
@@ -94,6 +85,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
-<script src="../assets/js/main.js"></script>
-</body>
-</html>
+<?php include 'partials/foot.php'; ?>

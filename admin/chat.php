@@ -75,71 +75,7 @@ $totalNaoLidas = (int)$db->query("SELECT COUNT(*) FROM chat_mensagens WHERE lido
 $totalSessoes = count($sessoes);
 $ultimoMsgId = $mensagens ? max(array_column($mensagens,'id')) : 0;
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat de Suporte — Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        .chat-admin-layout { display: grid; grid-template-columns: 300px 1fr; height: calc(100vh - 100px); gap: 0; background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 20px; }
-        .chat-list-panel { border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .chat-list-header { padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--light-gray); }
-        .chat-list-header h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-        .chat-list-header p { font-size: 12px; color: var(--text-light); }
-        .chat-list-scroll { flex: 1; overflow-y: auto; }
-        .chat-list-item { padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; display: block; color: var(--text); transition: background 0.15s; }
-        .chat-list-item:hover { background: rgba(0,102,255,0.04); }
-        .chat-list-item.active { background: rgba(0,102,255,0.08); border-left: 3px solid var(--primary); }
-        .chat-list-item .cli-nome { font-weight: 600; font-size: 13px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-        .chat-list-item .cli-preview { font-size: 12px; color: var(--text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-        .chat-list-item .cli-hora { font-size: 10px; color: var(--gray); margin-top: 3px; }
-        .badge-nl { background: var(--primary); color: white; border-radius: 50px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
-        .badge-nl.new-pulse { animation: pulse-nl 1s ease 3; }
-        @keyframes pulse-nl { 0%,100% { transform: scale(1); } 50% { transform: scale(1.4); } }
-
-        /* Chat panel */
-        .chat-main-panel { display: flex; flex-direction: column; }
-        .chat-main-header { padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--light-gray); display: flex; align-items: center; gap: 12px; }
-        .chat-main-header .avatar { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
-        .chat-main-header h3 { font-size: 15px; font-weight: 700; }
-        .chat-main-header p { font-size: 11px; color: var(--text-light); }
-        .chat-msgs-area { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-        .msg-row { display: flex; flex-direction: column; }
-        .msg-row.from-visitante { align-items: flex-start; }
-        .msg-row.from-admin { align-items: flex-end; }
-        .msg-row.from-sistema { align-items: center; }
-        .msg-bubble { max-width: 70%; padding: 9px 13px; border-radius: 12px; font-size: 13.5px; line-height: 1.45; word-break: break-word; }
-        .from-visitante .msg-bubble { background: #f1f4f8; border-bottom-left-radius: 3px; }
-        .from-admin .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 3px; }
-        .from-sistema .msg-bubble { background: #e8f4ff; color: #0055cc; font-size: 12px; border-radius: 50px; padding: 5px 14px; }
-        .msg-meta { font-size: 10px; color: var(--gray); margin-top: 3px; padding: 0 3px; }
-        .chat-input-area { padding: 12px 16px; border-top: 1px solid var(--border); background: white; display: flex; gap: 8px; align-items: flex-end; }
-        .chat-input-area textarea { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 14px; resize: none; font-family: inherit; line-height: 1.4; max-height: 120px; }
-        .chat-input-area textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
-        .btn-send { background: var(--primary); color: white; border: none; border-radius: 10px; width: 44px; height: 44px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
-        .btn-send:hover { background: var(--primary-dark); }
-        .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
-        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-light); gap: 10px; }
-        .empty-state i { font-size: 52px; color: #dde3ee; }
-        .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 2px 0; }
-        .typing-indicator span { width: 6px; height: 6px; background: var(--gray); border-radius: 50%; animation: blink 1.4s infinite both; }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes blink { 0%,80%,100% { opacity: 0; } 40% { opacity: 1; } }
-
-        /* Sound toggle */
-        .sound-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--text-light); margin-left: auto; display: flex; align-items: center; gap: 5px; }
-        .sound-btn.on { color: var(--primary); border-color: var(--primary); background: rgba(0,102,255,0.06); }
-
-        /* New message flash */
-        @keyframes flash-item { 0% { background: rgba(0,102,255,0.18); } 100% { background: transparent; } }
-        .flash { animation: flash-item 1s ease; }
-    </style>
-</head>
-<body class="admin-body">
+<?php $pageTitle = 'Chat de Suporte'; include 'partials/head.php'; ?>
 <?php include 'partials/sidebar.php'; ?>
 <div class="admin-main">
     <div class="admin-header" style="padding: 16px 20px 0;">
@@ -224,7 +160,6 @@ $ultimoMsgId = $mensagens ? max(array_column($mensagens,'id')) : 0;
     </div>
 </div>
 
-<script src="../assets/js/main.js"></script>
 <script>
 // ---- Sound System ----
 let _soundOn = localStorage.getItem('admin_sound') !== 'off';
@@ -433,5 +368,4 @@ function enviarResposta() {
         }).catch(() => { btn.disabled = false; });
 }
 </script>
-</body>
-</html>
+<?php include 'partials/foot.php'; ?>

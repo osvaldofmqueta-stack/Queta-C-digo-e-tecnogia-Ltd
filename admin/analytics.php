@@ -72,38 +72,7 @@ foreach ($visitasPorHora as $v) $horasMap[$v['hora']] = (int)$v['total'];
 // Trend
 $tendencia = $visitasHoje > $visitasOntem ? 'up' : ($visitasHoje < $visitasOntem ? 'down' : 'same');
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics — Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        .analytics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-        .analytics-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
-        .analytics-card .ac-label { font-size: 12px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-        .analytics-card .ac-value { font-size: 36px; font-weight: 800; line-height: 1; }
-        .analytics-card .ac-sub { font-size: 12px; color: var(--text-light); margin-top: 6px; display: flex; align-items: center; gap: 5px; }
-        .trend-up { color: #1a7a3a; } .trend-down { color: #cc3333; } .trend-same { color: var(--gray); }
-        .chart-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-        .chart-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-        .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .charts-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .paginas-table { width: 100%; }
-        .paginas-table tr td { padding: 7px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
-        .paginas-table tr:last-child td { border-bottom: none; }
-        .pagina-bar-wrap { background: var(--light-gray); border-radius: 4px; height: 6px; flex: 1; overflow: hidden; margin: 0 10px; }
-        .pagina-bar { background: var(--primary); height: 100%; border-radius: 4px; }
-        .live-badge { display: inline-flex; align-items: center; gap: 6px; background: #e8f9ee; color: #1a7a3a; border-radius: 50px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
-        .live-dot-g { width: 8px; height: 8px; background: #00e676; border-radius: 50%; animation: pulse-live 2s infinite; }
-        @keyframes pulse-live { 0%,100%{opacity:1;}50%{opacity:.3;} }
-        @media(max-width:900px){ .analytics-grid{grid-template-columns:repeat(2,1fr);} .charts-row,.charts-row2{grid-template-columns:1fr;} }
-    </style>
-</head>
-<body class="admin-body">
+<?php $pageTitle = 'Analytics'; $extraHead = '<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>'; include 'partials/head.php'; ?>
 <?php include 'partials/sidebar.php'; ?>
 <div class="admin-main">
     <div class="admin-header">
@@ -233,7 +202,6 @@ $tendencia = $visitasHoje > $visitasOntem ? 'up' : ($visitasHoje < $visitasOntem
     </div>
 </div>
 
-<script src="../assets/js/main.js"></script>
 <script>
 // Chart defaults
 Chart.defaults.font.family = 'Inter, sans-serif';
@@ -330,5 +298,4 @@ new Chart(document.getElementById('chartRegistos'), {
 // Auto-refresh every 60 seconds
 setTimeout(() => location.reload(), 60000);
 </script>
-</body>
-</html>
+<?php include 'partials/foot.php'; ?>

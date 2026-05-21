@@ -53,42 +53,7 @@ if (isset($_GET['carrinho'])) {
     $carrinhoItems = $ci->fetchAll();
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utilizadores Registados — Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .stat-mini { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; }
-        .stat-mini .val { font-size: 28px; font-weight: 800; color: var(--primary); }
-        .stat-mini .lbl { font-size: 12px; color: var(--text-light); margin-top: 2px; }
-        .user-table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-        .user-table th { background: var(--light-gray); padding: 11px 14px; text-align: left; font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: .5px; }
-        .user-table td { padding: 12px 14px; font-size: 13.5px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .user-table tr:last-child td { border-bottom: none; }
-        .user-table tr:hover td { background: rgba(0,102,255,0.03); }
-        .badge-status { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; }
-        .badge-ativo { background: #e6f9ee; color: #1a7a3a; }
-        .badge-inativo { background: #fff0f0; color: #cc3333; }
-        .avatar-cell { width: 34px; height: 34px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-        .search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-bar input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: inherit; }
-        .search-bar input:focus { outline: none; border-color: var(--primary); }
-        .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition); text-decoration: none; }
-        .btn-danger-sm { background: #fff0f0; color: #cc3333; border: 1px solid #ffc0c0; }
-        .btn-danger-sm:hover { background: #ffd5d5; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: white; border-radius: var(--radius); padding: 28px; max-width: 480px; width: 100%; max-height: 80vh; overflow-y: auto; }
-        .cart-item-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-        .cart-item-row:last-child { border-bottom: none; }
-        .cart-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    </style>
-</head>
-<body class="admin-body">
+<?php $pageTitle = 'Utilizadores'; include 'partials/head.php'; ?>
 <?php include 'partials/sidebar.php'; ?>
 <div class="admin-main">
     <div class="admin-header">
@@ -213,6 +178,4 @@ if (isset($_GET['carrinho'])) {
 </div>
 <?php endif; ?>
 
-<script src="../assets/js/main.js"></script>
-</body>
-</html>
+<?php include 'partials/foot.php'; ?>

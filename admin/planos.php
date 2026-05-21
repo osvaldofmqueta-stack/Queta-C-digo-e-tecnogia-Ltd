@@ -79,16 +79,7 @@ if (isset($_GET['editar'])) {
     if ($editando) $editandoItens = getPlanoItens($editando['id']);
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planos — Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body class="admin-body">
+<?php $pageTitle = 'Planos & Preços'; include 'partials/head.php'; ?>
 <?php include 'partials/sidebar.php'; ?>
 <div class="admin-main">
     <div class="admin-header">
@@ -260,7 +251,5 @@ if (isset($_GET['editar'])) {
     </div>
 </div>
 
-<script src="../assets/js/main.js"></script>
 <?php if ($editando): ?><script>openModal('modal-plano');</script><?php endif; ?>
-</body>
-</html>
+<?php include 'partials/foot.php'; ?>
