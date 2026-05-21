@@ -138,122 +138,114 @@ $slideCount = count($heroSlides);
     </div>
 </section>
 
-<!-- TRUST BAR -->
-<div class="trust-bar reveal">
-    <div class="container">
-        <div class="trust-items">
-            <div class="trust-item"><i class="fas fa-shield-alt"></i> <span>Dados 100% Seguros</span></div>
-            <div class="trust-divider"></div>
-            <div class="trust-item"><i class="fas fa-headset"></i> <span>Suporte Técnico Incluído</span></div>
-            <div class="trust-divider"></div>
-            <div class="trust-item"><i class="fas fa-cloud"></i> <span>Acesso Online 24/7</span></div>
-            <div class="trust-divider"></div>
-            <div class="trust-item"><i class="fas fa-graduation-cap"></i> <span>Formação Incluída</span></div>
-            <div class="trust-divider"></div>
-            <div class="trust-item"><i class="fas fa-sync-alt"></i> <span>Actualizações Grátis</span></div>
-        </div>
+<?php
+// Static testimonials (can be made dynamic later)
+$testimonials = [
+    ['nome'=>'Directora Rosa Fernandes','escola'=>'Colégio São João','provincia'=>'Luanda','texto'=>'Desde que adoptámos o Super Escola as matrículas e cobranças ficaram completamente automatizadas. Poupamos horas por dia!','stars'=>5,'inicial'=>'R'],
+    ['nome'=>'Director Carlos Mendes','escola'=>'Instituto Técnico Nacional','provincia'=>'Benguela','texto'=>'A gestão de notas e pautas digitais é excelente. Os professores adaptaram-se rapidamente e os pais adoram receber relatórios automáticos.','stars'=>5,'inicial'=>'C'],
+    ['nome'=>'Directora Ana Luísa','escola'=>'Escola Privada Horizonte','provincia'=>'Huambo','texto'=>'O suporte da equipa Queta é fantástico. Resolvem qualquer dúvida rapidamente. O sistema é intuitivo e completo.','stars'=>5,'inicial'=>'A'],
+];
+?>
+
+<!-- ═══════════════════════════════════════
+     TRUST TICKER
+═══════════════════════════════════════ -->
+<div class="trust-ticker">
+    <div class="trust-ticker-track">
+        <?php $items = ['🔒 Dados 100% Seguros','🎧 Suporte Incluído','☁️ Acesso Online 24/7','🎓 Formação Incluída','🔄 Actualizações Grátis','📊 Relatórios Automáticos','📱 Acesso pelo Telemóvel','✅ Instalação Assistida']; ?>
+        <?php for ($r=0;$r<3;$r++): foreach ($items as $it): ?>
+        <span class="trust-ticker-item"><?= $it ?></span>
+        <span class="trust-ticker-sep">·</span>
+        <?php endforeach; endfor; ?>
     </div>
 </div>
 
-<!-- STATS COUNTERS -->
-<section class="stats-section">
+<!-- ═══════════════════════════════════════
+     STATS BAND
+═══════════════════════════════════════ -->
+<section class="stats-band" id="sobre">
     <div class="container">
-        <div class="stats-grid-main">
-            <div class="stat-item reveal" data-delay="0">
-                <div class="stat-item-icon"><i class="fas fa-puzzle-piece"></i></div>
-                <span class="counter-num" data-target="79" data-suffix="+">0+</span>
-                <div class="stat-label">Funcionalidades</div>
+        <div class="stats-band-grid">
+            <div class="stats-band-item reveal" data-delay="0">
+                <span class="counter-num sbn" data-target="79" data-suffix="+">0+</span>
+                <span class="sbl">Funcionalidades</span>
             </div>
-            <div class="stat-item reveal" data-delay="100">
-                <div class="stat-item-icon green"><i class="fas fa-school"></i></div>
-                <span class="counter-num" data-target="100" data-suffix="+">0+</span>
-                <div class="stat-label">Escolas Clientes</div>
+            <div class="stats-band-div"></div>
+            <div class="stats-band-item reveal" data-delay="100">
+                <span class="counter-num sbn" data-target="100" data-suffix="+">0+</span>
+                <span class="sbl">Escolas Clientes</span>
             </div>
-            <div class="stat-item reveal" data-delay="200">
-                <div class="stat-item-icon orange"><i class="fas fa-tags"></i></div>
-                <span class="counter-num" data-target="3" data-suffix="">0</span>
-                <div class="stat-label">Planos Disponíveis</div>
+            <div class="stats-band-div"></div>
+            <div class="stats-band-item reveal" data-delay="200">
+                <span class="counter-num sbn" data-target="3" data-suffix="">0</span>
+                <span class="sbl">Planos Disponíveis</span>
             </div>
-            <div class="stat-item reveal" data-delay="300">
-                <div class="stat-item-icon ruby"><i class="fas fa-headset"></i></div>
-                <span class="counter-num" data-target="24" data-suffix="/7">0/7</span>
-                <div class="stat-label">Suporte Disponível</div>
+            <div class="stats-band-div"></div>
+            <div class="stats-band-item reveal" data-delay="300">
+                <span class="counter-num sbn" data-target="24" data-suffix="/7">0/7</span>
+                <span class="sbl">Suporte Disponível</span>
             </div>
         </div>
     </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- LOGO / BRAND BANNER -->
-<div class="logo-banner reveal" id="sobre">
-    <div class="container">
-        <div class="logo-banner-content">
-            <div class="logo-banner-text">
-                <h3><?= h(getConfig('site_nome', 'Queta Código e Tecnologia, Ltd')) ?></h3>
-                <p><?= h(getConfig('site_slogan', 'Tecnologia ao serviço da educação')) ?></p>
-            </div>
-            <div class="logo-banner-cta">
-                <a href="<?= $whatsapp ?>" target="_blank" class="btn-outline-white">
-                    <i class="fab fa-whatsapp"></i> Fala Connosco
-                </a>
-                <a href="<?= h($demoLink) ?>" class="btn-primary" style="background:white;color:var(--primary);">
-                    <i class="fas fa-calendar-alt"></i> Quero uma Demonstração
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- NAVEGUE POR CATEGORIA / APLICAÇÕES -->
-<section class="apps-section" id="aplicacoes">
+<!-- ═══════════════════════════════════════
+     APLICAÇÕES (pill grid)
+═══════════════════════════════════════ -->
+<?php if (!empty($aplicacoes)): ?>
+<section class="apps-pill-section" id="aplicacoes">
     <div class="container">
         <div class="section-header reveal">
             <span class="section-badge"><i class="fas fa-th-large"></i> As Nossas Soluções</span>
-            <h2 class="section-title">Navegue por Categoria</h2>
-            <p class="section-subtitle">Descubra as nossas aplicações desenvolvidas para modernizar a gestão educacional</p>
+            <h2 class="section-title">Tudo para gerir a sua escola</h2>
+            <p class="section-subtitle">Módulos integrados que cobrem toda a gestão académica e financeira</p>
         </div>
-        <div class="apps-grid">
-            <?php foreach ($aplicacoes as $ai => $app): ?>
-            <div class="app-card reveal" data-delay="<?= $ai * 100 ?>" onclick="window.location='aplicacao.php?id=<?= $app['id'] ?>'">
-                <div class="app-card-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <h3><?= h($app['nome']) ?></h3>
-                <p><?= h($app['descricao']) ?></p>
-                <span class="app-card-link">Ver Detalhes <i class="fas fa-arrow-right"></i></span>
-            </div>
+        <div class="apps-pill-grid">
+            <?php
+            $appIcons = ['fa-user-graduate','fa-money-bill-wave','fa-book-open','fa-chalkboard-teacher','fa-chart-pie','fa-comments','fa-calendar-alt','fa-file-alt'];
+            foreach ($aplicacoes as $ai => $app):
+            ?>
+            <a href="aplicacao.php?id=<?= $app['id'] ?>" class="app-pill reveal" data-delay="<?= $ai * 60 ?>">
+                <span class="app-pill-icon"><i class="fas <?= $appIcons[$ai % count($appIcons)] ?>"></i></span>
+                <span class="app-pill-name"><?= h($app['nome']) ?></span>
+                <i class="fas fa-arrow-right app-pill-arrow"></i>
+            </a>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
-<!-- FUNCIONALIDADES EM DESTAQUE -->
+<!-- ═══════════════════════════════════════
+     FEATURES BENTO GRID
+═══════════════════════════════════════ -->
 <?php if (!empty($destaques)):
 $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments','fa-chart-bar','fa-mobile-alt'];
 ?>
-<section class="features-section" id="funcionalidades">
+<section class="bento-section" id="funcionalidades">
     <div class="container">
         <div class="section-header reveal">
-            <span class="section-badge"><i class="fas fa-star"></i> Destaques</span>
-            <h2 class="section-title">Funcionalidades em Destaque</h2>
-            <p class="section-subtitle">As funcionalidades que estão a transformar a gestão escolar em Angola</p>
+            <span class="section-badge"><i class="fas fa-star"></i> Funcionalidades</span>
+            <h2 class="section-title">O que está incluído</h2>
+            <p class="section-subtitle">As ferramentas que transformam a gestão escolar em Angola</p>
         </div>
-        <div class="features-grid">
-            <?php foreach ($destaques as $fi => $f): ?>
-            <div class="feature-card reveal" data-delay="<?= ($fi % 3) * 100 ?>">
-                <div class="feature-card-img">
-                    <?php if ($f['imagem'] && file_exists($f['imagem'])): ?>
-                        <img src="<?= h($f['imagem']) ?>" alt="<?= h($f['titulo']) ?>">
+        <div class="bento-grid">
+            <?php foreach ($destaques as $fi => $f):
+                $icon = $featureIcons[$fi % count($featureIcons)];
+                $img = ($f['imagem'] && file_exists($f['imagem'])) ? $f['imagem'] : null;
+                $big = $fi === 0;
+            ?>
+            <div class="bento-card <?= $big ? 'bento-big' : '' ?> reveal" data-delay="<?= ($fi % 4) * 80 ?>">
+                <div class="bento-card-icon <?= $big ? 'bento-icon-big' : '' ?>">
+                    <?php if ($img): ?>
+                    <img src="<?= h($img) ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
                     <?php else: ?>
-                        <i class="fas <?= $featureIcons[$fi % count($featureIcons)] ?>"></i>
+                    <i class="fas <?= $icon ?>"></i>
                     <?php endif; ?>
                 </div>
-                <div class="feature-card-body">
-                    <span class="feature-badge"><?= h($f['aplicacao_nome'] ?? 'Super Escola') ?></span>
-                    <h4><?= h($f['titulo']) ?></h4>
-                    <p><?= h($f['descricao']) ?></p>
-                </div>
+                <div class="bento-card-tag"><?= h($f['aplicacao_nome'] ?? 'Super Escola') ?></div>
+                <h4 class="bento-card-title"><?= h($f['titulo']) ?></h4>
+                <?php if ($big): ?><p class="bento-card-desc"><?= h($f['descricao']) ?></p><?php endif; ?>
             </div>
             <?php endforeach; ?>
         </div>
@@ -261,26 +253,31 @@ $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments
 </section>
 <?php endif; ?>
 
-<!-- VIDEO DEMO SECTION -->
+<!-- ═══════════════════════════════════════
+     DEMO SPLIT
+═══════════════════════════════════════ -->
 <section class="demo-section" id="demo">
     <div class="container">
         <div class="demo-grid">
             <div class="demo-content reveal from-left">
-                <span class="section-badge"><i class="fas fa-play-circle"></i> Demo ao Vivo</span>
-                <h2>Simplifique a gestão da sua escola e gere mais receita!</h2>
-                <p>O Super Escola é o sistema ERP académico que transforma a gestão da sua instituição de ensino. Matrículas, notas, propinas e comunicação — tudo numa única plataforma simples e eficiente.</p>
-                <ul style="list-style:none;margin:0 0 28px;display:flex;flex-direction:column;gap:10px;">
-                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Gestão completa de matrículas e propinas</li>
-                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Lançamento de notas e pautas digitais</li>
-                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Portal para pais, alunos e professores</li>
-                    <li style="color:rgba(255,255,255,.8);font-size:15px;display:flex;align-items:center;gap:10px;"><i class="fas fa-check-circle" style="color:var(--secondary);font-size:16px;flex-shrink:0;"></i> Relatórios financeiros e académicos automáticos</li>
+                <span class="section-badge" style="background:rgba(0,200,150,0.15);color:#4fffcb;border:1px solid rgba(0,200,150,0.3);">
+                    <i class="fas fa-play-circle"></i> Demonstração
+                </span>
+                <h2>Simplifique a gestão e gere mais receita!</h2>
+                <p>O Super Escola centraliza tudo numa única plataforma — sem papéis, sem confusão, sem atrasos.</p>
+                <ul class="demo-checklist">
+                    <li><i class="fas fa-check-circle"></i> Matrículas e propinas automatizadas</li>
+                    <li><i class="fas fa-check-circle"></i> Notas e pautas digitais em segundos</li>
+                    <li><i class="fas fa-check-circle"></i> Portal para pais e encarregados</li>
+                    <li><i class="fas fa-check-circle"></i> Relatórios financeiros automáticos</li>
+                    <li><i class="fas fa-check-circle"></i> Comunicação directa com professores</li>
                 </ul>
                 <div class="demo-btns">
                     <a href="<?= $whatsapp ?>" target="_blank" class="btn-primary">
-                        <i class="fas fa-calendar-alt"></i> Agenda uma Demonstração
+                        <i class="fas fa-calendar-alt"></i> Agendar Demonstração
                     </a>
-                    <a href="#contacto" class="btn-outline-white">
-                        <i class="fas fa-info-circle"></i> Saber Mais
+                    <a href="#planos" class="btn-outline-white">
+                        <i class="fas fa-tags"></i> Ver Planos
                     </a>
                 </div>
             </div>
@@ -289,12 +286,18 @@ $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments
                     <?php if ($videoUrl): ?>
                     <div class="video-placeholder" id="video-wrapper" onclick="playVideo('<?= h($videoUrl) ?>')">
                         <div class="video-play-btn"><i class="fas fa-play"></i></div>
-                        <p>Clique para ver o vídeo do Super Escola</p>
+                        <p>Clique para ver o Super Escola em acção</p>
                     </div>
                     <?php else: ?>
-                    <div class="video-placeholder">
-                        <div class="video-play-btn"><i class="fas fa-play"></i></div>
-                        <p>Vídeo de apresentação do Super Escola</p>
+                    <div class="video-placeholder demo-mockup">
+                        <div class="demo-mockup-screen">
+                            <div class="dms-topbar"><span></span><span></span><span></span></div>
+                            <div class="dms-row"><div class="dms-label">Matrículas</div><div class="dms-bar"><div style="width:87%"></div></div><div class="dms-val">87%</div></div>
+                            <div class="dms-row"><div class="dms-label">Propinas</div><div class="dms-bar"><div style="width:94%;background:#00C896"></div></div><div class="dms-val">94%</div></div>
+                            <div class="dms-row"><div class="dms-label">Notas</div><div class="dms-bar"><div style="width:76%;background:#F5A623"></div></div><div class="dms-val">76%</div></div>
+                            <div class="dms-row"><div class="dms-label">Pais activos</div><div class="dms-bar"><div style="width:63%;background:#C0392B"></div></div><div class="dms-val">63%</div></div>
+                        </div>
+                        <div class="video-play-btn" style="position:absolute;"><i class="fas fa-play"></i></div>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -303,31 +306,9 @@ $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments
     </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- PARA QUEM É INDICADO -->
-<?php if (!empty($audiencia)): ?>
-<section class="audience-section" id="para-quem">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-badge"><i class="fas fa-users"></i> Para Quem É</span>
-            <h2 class="section-title">Para Quem é Indicado o Super Escola?</h2>
-            <p class="section-subtitle">Desenvolvido para todos os tipos de instituições de ensino em Angola e África</p>
-        </div>
-        <div class="audience-grid">
-            <?php foreach ($audiencia as $ai => $aud): ?>
-            <div class="audience-card reveal" data-delay="<?= $ai * 80 ?>">
-                <div class="audience-card-icon"><i class="fas <?= h($aud['icone']) ?>"></i></div>
-                <h4><?= h($aud['titulo']) ?></h4>
-                <p><?= h($aud['descricao']) ?></p>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- PLANOS / PREÇOS -->
+<!-- ═══════════════════════════════════════
+     PLANOS / PREÇOS
+═══════════════════════════════════════ -->
 <?php if (!empty($planos)):
     $planoIcons = ['Premium' => '⭐', 'Golden' => '🥇', 'Ruby' => '💎'];
 ?>
@@ -335,33 +316,32 @@ $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments
     <div class="container">
         <div class="section-header reveal">
             <span class="section-badge"><i class="fas fa-tags"></i> Planos & Preços</span>
-            <h2 class="section-title">Escolha o Plano Certo para a sua Escola</h2>
-            <p class="section-subtitle">Planos flexíveis com funcionalidades pensadas para todos os tipos de instituições de ensino.</p>
+            <h2 class="section-title">Escolha o plano da sua escola</h2>
+            <p class="section-subtitle">Planos flexíveis pensados para todos os tipos de instituição de ensino.</p>
         </div>
         <div class="planos-grid">
             <?php foreach ($planos as $pi => $plano):
                 $itens = getPlanoItens($plano['id']);
                 $icon = $planoIcons[$plano['nome']] ?? '🎓';
-                $numItens = count($itens);
             ?>
             <div class="plano-card <?= $plano['destaque'] ? 'plano-destaque' : '' ?> reveal" data-delay="<?= $pi * 120 ?>">
-                <div class="plano-header" style="background: linear-gradient(135deg, <?= h($plano['cor']) ?>, <?= h($plano['cor']) ?>dd); border-top: none;">
+                <div class="plano-header" style="background:linear-gradient(135deg,<?= h($plano['cor']) ?>,<?= h($plano['cor']) ?>cc);">
                     <div class="plano-icon-row">
-                        <span class="plano-emoji" style="font-size:36px;"><?= $icon ?></span>
+                        <span class="plano-emoji"><?= $icon ?></span>
                         <?php if ($plano['badge']): ?>
                         <span class="plano-count-badge"><?= h($plano['badge']) ?></span>
                         <?php endif; ?>
                     </div>
-                    <h3 class="plano-nome" style="color:white;"><?= h($plano['nome']) ?></h3>
+                    <h3 class="plano-nome"><?= h($plano['nome']) ?></h3>
                     <?php if ($plano['descricao']): ?>
-                    <p class="plano-desc" style="color:rgba(255,255,255,.85);"><?= h($plano['descricao']) ?></p>
+                    <p class="plano-desc"><?= h($plano['descricao']) ?></p>
                     <?php endif; ?>
                     <div class="plano-preco">
                         <?php if ($plano['preco'] === 'Consultar'): ?>
-                        <span class="plano-valor" style="color:white; font-size:22px;">Consultar preço</span>
+                        <span class="plano-valor" style="font-size:22px;">Consultar preço</span>
                         <?php else: ?>
-                        <span class="plano-valor" style="color:white;"><?= h($plano['preco']) ?></span>
-                        <span class="plano-periodo" style="color:rgba(255,255,255,.8);">/ <?= h($plano['periodo']) ?></span>
+                        <span class="plano-valor"><?= h($plano['preco']) ?></span>
+                        <span class="plano-periodo">/ <?= h($plano['periodo']) ?></span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -375,92 +355,120 @@ $featureIcons = ['fa-users-cog','fa-money-bill-wave','fa-book-open','fa-comments
                 </ul>
                 <div class="plano-footer">
                     <?php if (clienteLogado()): ?>
-                    <button onclick="adicionarAoCarrinho(<?= $plano['id'] ?>, this)" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>; width:100%; cursor:pointer; font-family:inherit;">
+                    <button onclick="adicionarAoCarrinho(<?= $plano['id'] ?>, this)" class="plano-btn" style="background:<?= h($plano['cor']) ?>;color:white;border-color:<?= h($plano['cor']) ?>;width:100%;cursor:pointer;font-family:inherit;">
                         <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
                     </button>
                     <?php else: ?>
-                    <a href="/registro.php?plano=<?= $plano['id'] ?>" class="plano-btn" style="background: <?= h($plano['cor']) ?>; color: white; border-color: <?= h($plano['cor']) ?>;">
-                        <i class="fas fa-user-plus"></i> Registar para Contratar
+                    <a href="/registro.php?plano=<?= $plano['id'] ?>" class="plano-btn" style="background:<?= h($plano['cor']) ?>;color:white;border-color:<?= h($plano['cor']) ?>;">
+                        <i class="fas fa-user-plus"></i> Contratar Agora
                     </a>
                     <?php endif; ?>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
-        <div class="reveal" style="text-align:center; margin-top:28px; padding:18px 24px; background:linear-gradient(135deg,#f0f7ff,#e8f4ff); border-radius:14px; font-size:14px; border:1px solid rgba(0,102,255,0.12);">
-            <i class="fas fa-shield-alt" style="color:var(--primary);margin-right:6px;"></i>
-            Todos os planos incluem suporte de instalação e formação.
-            <a href="<?= getWhatsappLink() ?>" target="_blank" style="color:var(--primary); font-weight:700; margin-left:4px;"><i class="fab fa-whatsapp"></i> Fale connosco para uma proposta personalizada</a>.
-        </div>
-        <?php if (!clienteLogado()): ?>
-        <div class="reveal" style="text-align:center; margin-top:12px; padding:14px 20px; background:#f0f7ff; border-radius:10px; font-size:14px;">
-            <i class="fas fa-user-circle" style="color:var(--primary);"></i>
-            Para adicionar ao carrinho, <a href="/registro.php" style="color:var(--primary);font-weight:600;">crie uma conta grátis</a> ou <a href="/login.php" style="color:var(--primary);font-weight:600;">entre na sua conta</a>.
-        </div>
-        <?php endif; ?>
-        <div class="reveal" style="text-align:center; margin-top:20px;">
-            <a href="planos-comparacao.php" class="btn-secondary">
-                <i class="fas fa-table"></i> Ver Comparação Completa das 79 Funcionalidades
-            </a>
+        <div class="plans-footer-note reveal">
+            <i class="fas fa-shield-alt"></i>
+            Todos os planos incluem instalação, formação e suporte.
+            <a href="planos-comparacao.php"><i class="fas fa-table"></i> Comparar todas as 79 funcionalidades</a>
+            &nbsp;·&nbsp;
+            <a href="<?= getWhatsappLink() ?>" target="_blank"><i class="fab fa-whatsapp"></i> Proposta personalizada</a>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
-<!-- MANUAL DE APOIO DESTAQUES -->
-<?php if (!empty($recentTopicos)):
-$topicIcons = ['fa-rocket','fa-book','fa-cog','fa-chart-bar'];
-?>
-<section style="background:white; padding:64px 0;">
+<!-- ═══════════════════════════════════════
+     TESTEMUNHOS
+═══════════════════════════════════════ -->
+<section class="testimonials-section" id="testemunhos">
     <div class="container">
         <div class="section-header reveal">
-            <span class="section-badge"><i class="fas fa-book-open"></i> Manual de Apoio</span>
-            <h2 class="section-title">Artigos Recentes do Manual</h2>
-            <p class="section-subtitle">Guias e tutoriais para tirar o máximo proveito do Super Escola</p>
+            <span class="section-badge"><i class="fas fa-quote-left"></i> Testemunhos</span>
+            <h2 class="section-title">O que dizem as escolas</h2>
+            <p class="section-subtitle">Directores e gestores que já transformaram as suas instituições com o Super Escola</p>
         </div>
-        <div class="features-grid">
-            <?php foreach ($recentTopicos as $ti => $t): ?>
-            <div class="feature-card reveal" data-delay="<?= ($ti % 4) * 100 ?>" onclick="window.location='manual/topico.php?id=<?= $t['id'] ?>'" style="cursor:pointer;">
-                <div class="feature-card-img">
-                    <i class="fas <?= $topicIcons[$ti % count($topicIcons)] ?>"></i>
+        <div class="testimonials-grid">
+            <?php foreach ($testimonials as $ti => $t): ?>
+            <div class="testimonial-card reveal" data-delay="<?= $ti * 100 ?>">
+                <div class="testimonial-stars">
+                    <?php for ($s=0;$s<$t['stars'];$s++): ?><i class="fas fa-star"></i><?php endfor; ?>
                 </div>
-                <div class="feature-card-body">
-                    <span class="feature-badge"><?= h($t['categoria_nome']) ?></span>
-                    <h4><?= h($t['titulo']) ?></h4>
-                    <p><?= h(mb_substr($t['conteudo'] ?? '', 0, 100)) ?>...</p>
+                <p class="testimonial-text">"<?= h($t['texto']) ?>"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar"><?= h($t['inicial']) ?></div>
+                    <div>
+                        <div class="testimonial-name"><?= h($t['nome']) ?></div>
+                        <div class="testimonial-school"><i class="fas fa-school"></i> <?= h($t['escola']) ?> · <?= h($t['provincia']) ?></div>
+                    </div>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
-        <div class="reveal" style="text-align:center; margin-top:32px;">
-            <a href="manual/" class="btn-secondary"><i class="fas fa-book"></i> Ver Todo o Manual</a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     MANUAL (compact link list)
+═══════════════════════════════════════ -->
+<?php if (!empty($recentTopicos)): ?>
+<section class="manual-compact" id="manual">
+    <div class="container">
+        <div class="manual-compact-inner reveal">
+            <div class="manual-compact-header">
+                <div>
+                    <span class="section-badge" style="margin-bottom:10px;"><i class="fas fa-book-open"></i> Manual de Apoio</span>
+                    <h3>Tutoriais e guias recentes</h3>
+                </div>
+                <a href="manual/" class="btn-secondary" style="flex-shrink:0;"><i class="fas fa-arrow-right"></i> Ver todos</a>
+            </div>
+            <div class="manual-compact-list">
+                <?php
+                $topicIcons = ['fa-rocket','fa-book','fa-cog','fa-chart-bar'];
+                foreach ($recentTopicos as $ti => $t):
+                ?>
+                <a href="manual/topico.php?id=<?= $t['id'] ?>" class="manual-compact-item">
+                    <span class="mci-icon"><i class="fas <?= $topicIcons[$ti % count($topicIcons)] ?>"></i></span>
+                    <span class="mci-body">
+                        <span class="mci-cat"><?= h($t['categoria_nome']) ?></span>
+                        <span class="mci-title"><?= h($t['titulo']) ?></span>
+                    </span>
+                    <i class="fas fa-chevron-right mci-arrow"></i>
+                </a>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
-<!-- FALA CONNOSCO CTA -->
-<section class="contact-cta-section" id="contacto">
+<!-- ═══════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════ -->
+<section class="final-cta" id="contacto">
     <div class="container">
-        <div class="reveal" style="max-width:600px;margin:0 auto;text-align:center;">
-            <div style="font-size:52px;margin-bottom:16px;animation:bounce 2s infinite;">💬</div>
-            <h2><i class="fab fa-whatsapp"></i> Fala Connosco</h2>
-            <p>Tem dúvidas sobre o Super Escola? A nossa equipa está pronta para ajudar agora mesmo!</p>
-            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
-                <a href="<?= $whatsapp ?>" target="_blank" class="btn-whatsapp-large">
-                    <i class="fab fa-whatsapp"></i> Enviar Mensagem no WhatsApp
+        <div class="final-cta-inner reveal">
+            <div class="final-cta-text">
+                <h2>Pronto para transformar a sua escola?</h2>
+                <p>Fale connosco hoje e receba uma demonstração gratuita do Super Escola.</p>
+                <div class="final-cta-trust">
+                    <span><i class="fas fa-check"></i> Sem compromisso</span>
+                    <span><i class="fas fa-check"></i> Instalação assistida</span>
+                    <span><i class="fas fa-check"></i> Suporte dedicado</span>
+                </div>
+            </div>
+            <div class="final-cta-actions">
+                <a href="<?= $whatsapp ?>" target="_blank" class="cta-btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Falar pelo WhatsApp
                 </a>
-                <a href="mailto:<?= h(getConfig('site_email', 'geral@queta.ao')) ?>" class="btn-outline-white" style="border-color:white;color:white;">
+                <a href="mailto:<?= h(getConfig('site_email', 'geral@queta.ao')) ?>" class="cta-btn-email">
                     <i class="fas fa-envelope"></i> Enviar Email
                 </a>
+                <p class="final-cta-note"><i class="fas fa-clock"></i> Respondemos em menos de 1 hora</p>
             </div>
-            <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.7);"><i class="fas fa-clock"></i> Respondemos em menos de 1 hora nos dias úteis</p>
         </div>
     </div>
 </section>
-<style>
-@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-</style>
 
 <script>
 function adicionarAoCarrinho(planoId, btn) {
